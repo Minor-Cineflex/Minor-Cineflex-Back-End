@@ -12,6 +12,9 @@ class MinorCineflex:
     def get_person(self, username, password):
         pass
 
+    def get_cinema_list(self):
+        pass
+
 class Cinema:
     def __init__(self, cinema_id: str, name: str, location: str, opentime: datetime, closetime: datetime, cinema_management):
         self.__cinema_id = cinema_id
@@ -30,6 +33,9 @@ class CinemaManagement:
     
     def add_theater(self, theater):
         self.__theater_list.append(theater)
+
+    def get_Movies_list(self):
+        pass
 
 class Person:
     def __init__(self, name: str, tel_no: str, email: str, birthday: datetime, gender: str, account):
