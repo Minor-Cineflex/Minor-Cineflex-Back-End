@@ -117,6 +117,9 @@ class User(Person):
 class Admin(Person):
     pass
 
+Cinema.model_rebuild()
+Showtime.model_rebuild()
+
 app = FastAPI()
 
 origins = [
@@ -133,10 +136,13 @@ app.add_middleware(
 
 memory_db = MinorCineflex(cinema_list=[], person_list=[])
 
+#system
 @app.get("/minorcineflex", response_model=MinorCineflex)
 def get_system():
     return memory_db
 
+
+#person
 @app.get("/person", response_model=List[Person])
 def get_person():
     if not memory_db.person_list:
@@ -147,6 +153,19 @@ def get_person():
 def add_person(user: User):
     memory_db.person_list.append(user)
     return user
+
+
+#cinema
+@app.get("/cinema", response_model=List[Cinema])
+def get_cinema():
+    if not memory_db.cinema_list:
+        return []
+    return memory_db.cinema_list
+
+@app.post("/cinema", response_model=Cinema)
+def add_cinema(cinema: Cinema):
+    memory_db.cinema_list.append(cinema)
+    return cinema
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

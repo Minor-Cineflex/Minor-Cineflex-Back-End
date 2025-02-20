@@ -15,7 +15,7 @@ class MinorCineflex:
     
     def to_dic(self):
         return {
-            "cinema_list": self.cinema_list,
+            "cinema_list": [cinema.to_dic() for cinema in self.__cinema_list],
             "person_list": [person.to_dic() for person in self.__person_list]
         }
 
@@ -26,11 +26,16 @@ class Cinema:
         self.__location = location
         self.__opentime = opentime
         self.__closetime = closetime
-        self.__cinema_management = cinema_management.to_dic()
+        self.__cinema_management = cinema_management
 
     def to_dic(self):
         return{
-            []
+            "cinema_id": self.__cinema_id,
+            "name": self.__name,
+            "location": self.__location,
+            "opentime": self.__opentime,
+            "closetime": self.__closetime,
+            "cinema_management": self.__cinema_management.to_dic()
         }
 
 class CinemaManagement:
@@ -48,10 +53,10 @@ class CinemaManagement:
 
     def to_dic(self):
         return {
-            "theater_list": self.__theater_list.todic(),
-            "showtime": self.__showtime_list.todic(),
-            "booking_list": self.__booking_list.todic(),
-            "movie_list": self.__movie_list.todic()
+            "theater_list": self.__theater_list,
+            "showtime_list": self.__showtime_list,
+            "booking_list": self.__booking_list,
+            "movie_list": self.__movie_list
         }
 
 class Person:
@@ -248,7 +253,7 @@ class Document:
             "document_type": self.__document_type
         }
 
-data = [
+person_data = [
     {
         "name": "Khom",
         "tel_no": "1224",
@@ -285,12 +290,40 @@ data = [
     }
 ]
 
+cinema_data = [
+    {
+        "cinema_id": "101",
+        "name": "minor_1",
+        "location": "122",
+        "opentime": "2005-12-12",
+        "closetime": "2005-12-12",
+        "cinema_management": {
+            "theater_list": [],
+            "showtime_list": [],
+            "booking_list": [],
+            "movie_list": []
+        }
+    },
+    {
+        "cinema_id": "102",
+        "name": "minor_2",
+        "location": "123",
+        "opentime": "2005-12-11",
+        "closetime": "2005-12-11",
+        "cinema_management": {
+            "theater_list": [],
+            "showtime_list": [],
+            "booking_list": [],
+            "movie_list": []
+        }
+    }
+]
+
 system = MinorCineflex()
 
-for i in data:
+for i in person_data:
     user = User(
-        i["name"], i["tel_no"], i["email"], i["birthday"], i["gender"],
-        Account(
+        i["name"], i["tel_no"], i["email"], i["birthday"], i["gender"], Account(
             i["account"]["username"], i["account"]["password"], i["account"]["account_id"],
             i["account"]["point"], i["account"]["registered_date"], i["account"]["expiration_date"]
         )
@@ -298,5 +331,16 @@ for i in data:
     system.person_list().append(user)
 
     response = requests.post("http://localhost:8000/person" , json=user.to_dic())
+    print("Status Code:", response.status_code)
+    print("Response:", response.json())
+
+for i in cinema_data:
+    cinema = Cinema(
+        i["cinema_id"], i["name"], i["location"], i["opentime"], i["closetime"], CinemaManagement()
+    )
+
+    system.cinema_list().append(cinema)
+
+    response = requests.post("http://localhost:8000/cinema", json=cinema.to_dic())
     print("Status Code:", response.status_code)
     print("Response:", response.json())
