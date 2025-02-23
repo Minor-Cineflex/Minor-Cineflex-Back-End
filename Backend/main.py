@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 
 class MinorCineflex:
@@ -104,6 +104,24 @@ class Account:
         self.__expiration_date = expiration_date
         self.__history: List[Booking] = []
         self.__document_list: List[Document] = []
+
+    #getter
+    def get_username(self):
+        return self.__username
+    def get_password(self):
+        return self.__password
+    def get_account_id(self):
+        return self.__account_id
+    def get_point(self):
+        return self.__point
+    def get_registered_date(self):
+        return self.__registered_date
+    def get_expiration_date(self):
+        return self.__expiration_date
+    def get_history(self):
+        return self.__history
+    def get_document_list(self):
+        return self.__document_list
 
 class Movie:
     def __init__(self, name: str, img: str, movie_type: str, movie_id: str, detail: str, duration: int):
@@ -217,6 +235,22 @@ class PersonResponse(BaseModel):
     gender: str
     account: dict
 
+class AccountRequest(BaseModel):
+    username: str
+    password: str
+    account_id: str
+    point: int
+    registered_date: datetime
+    expiration_date: datetime
+
+class PersonRequest(BaseModel):
+    name: str
+    tel_no: str
+    email: str
+    birthday: Optional[datetime]
+    gender: str
+    account: AccountRequest
+
 class MinorCineflexResponse(BaseModel):
     cinema_list: List[CinemaResponse]
     person_list: List[PersonResponse]
@@ -245,12 +279,67 @@ def get_system():
         "person_list": [PersonResponse(
             name=p.get_name(),
             tel_no=p.get_tel_no(),
-            email=p.get_email,
+            email=p.get_email(),
             birthday=p.get_birthday(),
             gender=p.get_gender(),
-            account=p.get_account()
+            account={
+                "username": p.get_account().get_username(),
+                "password": p.get_account().get_password(),
+                "account_id": p.get_account().get_account_id(),
+                "point": p.get_account().get_point(),
+                "registered_date": p.get_account().get_registered_date(),
+                "expiration_date": p.get_account().get_expiration_date(),
+                "history": p.get_account().get_history(),
+                "document_list": p.get_account().get_document_list()
+            }
         ) for p in memory_db.person_list()]
     }
+
+#person
+@app.get("/minorcineflex/person", response_model=List[PersonResponse])
+def get_person():
+    return [
+        PersonResponse(
+            name=p.get_name(),
+            tel_no=p.get_tel_no(),
+            email=p.get_email(),
+            birthday=p.get_birthday(),
+            gender=p.get_gender(),
+            account={
+                "username": p.get_account().get_username(),
+                "password": p.get_account().get_password(),
+                "account_id": p.get_account().get_account_id(),
+                "point": p.get_account().get_point(),
+                "registered_date": p.get_account().get_registered_date(),
+                "expiration_date": p.get_account().get_expiration_date(),
+                "history": p.get_account().get_history(),
+                "document_list": p.get_account().get_document_list(),
+            }
+        ) for p in memory_db.person_list()
+    ]
+
+@app.post("/minorcineflex/add_person")
+def add_person(person: PersonRequest):
+    new_account = Account(
+        username=person.account.username,
+        password=person.account.password,
+        account_id=person.account.account_id,
+        point=person.account.point,
+        registered_date=person.account.registered_date,
+        expiration_date=person.account.expiration_date
+    )
+
+    memory_db.add_person(
+        name=person.name,
+        tel_no=person.tel_no,
+        email=person.email,
+        birthday=person.birthday,
+        gender=person.gender,
+        account=new_account
+    )
+
+    return {"message": "Person added successfully"}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
