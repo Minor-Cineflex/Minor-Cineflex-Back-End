@@ -17,8 +17,10 @@ class MinorCineflex:
         self.__person_list.append(Person(name, tel_no, email, birthday, gender, account))
 
     #getter
+    @property
     def cinema_list(self):
         return self.__cinema_list
+    @property
     def person_list(self):
         return self.__person_list
 
@@ -32,17 +34,23 @@ class Cinema:
         self.__cinema_management = cinema_management
 
     #getter
-    def get_cinema_id(self):
+    @property
+    def cinema_id(self):
         return self.__cinema_id
-    def get_name(self):
+    @property
+    def name(self):
         return self.__name
-    def get_location(self):
+    @property
+    def location(self):
         return self.__location
-    def get_opentime(self):
+    @property
+    def opentime(self):
         return self.__opentime
-    def get_closetime(self):
+    @property
+    def closetime(self):
         return self.__closetime
-    def get_cinema_management(self):
+    @property
+    def cinema_management(self):
         return self.__cinema_management
 
 class CinemaManagement:
@@ -56,13 +64,17 @@ class CinemaManagement:
         self.__theater_list.append(theater)
 
     #getter
-    def get_theater_list(self):
+    @property
+    def theater_list(self):
         return self.__theater_list
-    def get_showtime_list(self):
+    @property
+    def showtime_list(self):
         return self.__showtime_list
-    def get_booking_list(self):
+    @property
+    def booking_list(self):
         return self.__booking_list
-    def get_movie_list(self):
+    @property
+    def movie_list(self):
         return self.__movie_list
 
 class Person:
@@ -75,17 +87,23 @@ class Person:
         self.__account = account
 
     #getter
-    def get_name(self):
+    @property
+    def name(self):
         return self.__name
-    def get_tel_no(self):
+    @property
+    def tel_no(self):
         return self.__tel_no
-    def get_email(self):
+    @property
+    def email(self):
         return self.__email
-    def get_birthday(self):
+    @property
+    def birthday(self):
         return self.__birthday
-    def get_gender(self):
+    @property
+    def gender(self):
         return self.__gender
-    def get_account(self):
+    @property
+    def account(self):
         return self.__account
 
 class User(Person):
@@ -106,21 +124,29 @@ class Account:
         self.__document_list: List[Document] = []
 
     #getter
-    def get_username(self):
+    @property
+    def username(self):
         return self.__username
-    def get_password(self):
+    @property
+    def password(self):
         return self.__password
-    def get_account_id(self):
+    @property
+    def account_id(self):
         return self.__account_id
-    def get_point(self):
+    @property
+    def point(self):
         return self.__point
-    def get_registered_date(self):
+    @property
+    def registered_date(self):
         return self.__registered_date
-    def get_expiration_date(self):
+    @property
+    def expiration_date(self):
         return self.__expiration_date
-    def get_history(self):
+    @property
+    def history(self):
         return self.__history
-    def get_document_list(self):
+    @property
+    def document_list(self):
         return self.__document_list
 
 class Movie:
@@ -261,61 +287,61 @@ memory_db.add_cinema(101, "minor_1", "12.001.0656", datetime.strptime("2011-12-1
 
 #system
 @app.get("/minorcineflex", response_model=MinorCineflexResponse)
-def get_system():
+def system():
    return {
        "cinema_list": [CinemaResponse(
-            cinema_id=c.get_cinema_id(), 
-            name=c.get_name(), 
-            location=c.get_location(), 
-            opentime=c.get_opentime(), 
-            closetime=c.get_closetime(),
+            cinema_id=c.cinema_id, 
+            name=c.name, 
+            location=c.location, 
+            opentime=c.opentime, 
+            closetime=c.closetime,
             cinema_management=CinemaManagementResponse(
-                theater_list=[theater for theater in c.get_cinema_management().get_theater_list()],
-                showtime_list=[showtime for showtime in c.get_cinema_management().get_showtime_list()],
-                booking_list=[booking for booking in c.get_cinema_management().get_booking_list()],
-                movie_list=[movie for movie in c.get_cinema_management().get_movie_list()] 
+                theater_list=[theater for theater in c.cinema_management.theater_list],
+                showtime_list=[showtime for showtime in c.cinema_management.showtime_list],
+                booking_list=[booking for booking in c.cinema_management.booking_list],
+                movie_list=[movie for movie in c.cinema_management.movie_list] 
             )
-        ) for c in memory_db.cinema_list()],
+        ) for c in memory_db.cinema_list],
         "person_list": [PersonResponse(
-            name=p.get_name(),
-            tel_no=p.get_tel_no(),
-            email=p.get_email(),
-            birthday=p.get_birthday(),
-            gender=p.get_gender(),
+            name=p.name,
+            tel_no=p.tel_no,
+            email=p.email,
+            birthday=p.birthday,
+            gender=p.gender,
             account={
-                "username": p.get_account().get_username(),
-                "password": p.get_account().get_password(),
-                "account_id": p.get_account().get_account_id(),
-                "point": p.get_account().get_point(),
-                "registered_date": p.get_account().get_registered_date(),
-                "expiration_date": p.get_account().get_expiration_date(),
-                "history": p.get_account().get_history(),
-                "document_list": p.get_account().get_document_list()
+                "username": p.account.username,
+                "password": p.account.password,
+                "account_id": p.account.account_id,
+                "point": p.account.point,
+                "registered_date": p.account.registered_date,
+                "expiration_date": p.account.expiration_date,
+                "history": p.account.history,
+                "document_list": p.account.document_list
             }
-        ) for p in memory_db.person_list()]
+        ) for p in memory_db.person_list]
     }
 
 #person
 @app.get("/minorcineflex/person", response_model=List[PersonResponse])
-def get_person():
+def person():
     return [
         PersonResponse(
-            name=p.get_name(),
-            tel_no=p.get_tel_no(),
-            email=p.get_email(),
-            birthday=p.get_birthday(),
-            gender=p.get_gender(),
+            name=p.name,
+            tel_no=p.tel_no,
+            email=p.email,
+            birthday=p.birthday,
+            gender=p.gender,
             account={
-                "username": p.get_account().get_username(),
-                "password": p.get_account().get_password(),
-                "account_id": p.get_account().get_account_id(),
-                "point": p.get_account().get_point(),
-                "registered_date": p.get_account().get_registered_date(),
-                "expiration_date": p.get_account().get_expiration_date(),
-                "history": p.get_account().get_history(),
-                "document_list": p.get_account().get_document_list(),
+                "username": p.account.username,
+                "password": p.account.password,
+                "account_id": p.account.account_id,
+                "point": p.account.point,
+                "registered_date": p.account.registered_date,
+                "expiration_date": p.account.expiration_date,
+                "history": p.account.history,
+                "document_list": p.account.document_list,
             }
-        ) for p in memory_db.person_list()
+        ) for p in memory_db.person_list
     ]
 
 @app.post("/minorcineflex/add_person")
