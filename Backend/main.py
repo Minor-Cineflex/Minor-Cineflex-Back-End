@@ -11,8 +11,8 @@ class MinorCineflex:
         self.__cinema_list: List[Cinema] = []
         self.__person_list: List[Person] = []
 
-    def add_cinema(self, id: int, name: str, location: str, opentime: datetime, closetime: datetime, cinema_management):
-        self.__cinema_list.append(Cinema(id, name, location, opentime, closetime, cinema_management))
+    def add_cinema(self, id: int, name: str, location: str, region: str, opentime: datetime, closetime: datetime, cinema_management):
+        self.__cinema_list.append(Cinema(id, name, location, region, opentime, closetime, cinema_management))
 
     def add_person(self, name: str, tel_no: str, email: str, birthday: datetime, gender: str, account):
         self.__person_list.append(Person(name, tel_no, email, birthday, gender, account))
@@ -44,7 +44,8 @@ class MinorCineflex:
             "cinema_list": [CinemaResponse(
                 cinema_id=c.cinema_id, 
                 name=c.name, 
-                location=c.location, 
+                location=c.location,
+                region=c.region, 
                 opentime=c.opentime, 
                 closetime=c.closetime,
                 cinema_management=CinemaManagementResponse(
@@ -83,10 +84,11 @@ class MinorCineflex:
         return self.__person_list
 
 class Cinema:
-    def __init__(self, cinema_id: str, name: str, location: str, opentime: datetime, closetime: datetime, cinema_management):
+    def __init__(self, cinema_id: str, name: str, location: str,region: str, opentime: datetime, closetime: datetime, cinema_management):
         self.__cinema_id = cinema_id
         self.__name = name
         self.__location = location
+        self.__region = region
         self.__opentime = opentime
         self.__closetime = closetime
         self.__cinema_management = cinema_management
@@ -101,6 +103,9 @@ class Cinema:
     @property
     def location(self):
         return self.__location
+    @property
+    def region(self):
+        return self.__region
     @property
     def opentime(self):
         return self.__opentime
@@ -223,13 +228,14 @@ class Account:
         return self.__reserved_list
 
 class Movie:
-    def __init__(self, name: str, img: str, movie_type: str, movie_id: str, detail: str, duration: int):
+    def __init__(self, name: str, img: str, movie_type: str, movie_id: str, detail: str, duration: int, role: str):
         self.__name = name
         self.__img = img
         self.__type = movie_type
         self.__movie_id = movie_id
         self.__detail = detail
         self.__duration = duration
+        self.__role = role
 
 class Theater:
     def __init__(self, theater_id: str, theater_type: str, seat_amount: int, status: bool, audio_type: str, video_type: str):
@@ -242,7 +248,8 @@ class Theater:
         self.__maintainance_list: List[Maintainance] = []
 
 class Showtime:
-    def __init__(self, start_date: datetime, cinema, theater, movie, dub: bool, sub: bool):
+    def __init__(self,showtime_id: str, start_date: datetime, cinema, theater, movie, dub: bool, sub: bool):
+        self.__showtime_id = showtime_id
         self.__start_date = start_date
         self.__cinema = cinema
         self.__theater = theater
@@ -297,6 +304,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+#BaseModel for API route
 class SeatResponse(BaseModel):
     seat_id: str
     seat_type: str
@@ -325,6 +333,7 @@ class MovieResponse(BaseModel):
     movie_id: str
     detail: str
     duration: int
+    role: str
 
 class ShowtimeResponse(BaseModel):
     showtime_id: str
@@ -347,6 +356,7 @@ class CinemaResponse(BaseModel):
     cinema_id: int
     name: str
     location: str
+    region: str
     opentime: datetime
     closetime: datetime
     cinema_management: CinemaManagementResponse
@@ -397,9 +407,9 @@ class MinorCineflexResponse(BaseModel):
     cinema_list: List[CinemaResponse]
     person_list: List[PersonResponse]
 
+#temporary_database
 memory_db = MinorCineflex()
-
-memory_db.add_cinema(101, "minor_1", "12.001.0656", datetime.strptime("2011-12-19", "%Y-%m-%d"), datetime.strptime("2020-12-19", "%Y-%m-%d"), CinemaManagement())
+memory_db.add_cinema(101, "minor_1", "12.001.0656", "nort", datetime.strptime("2011-12-19", "%Y-%m-%d"), datetime.strptime("2020-12-19", "%Y-%m-%d"), CinemaManagement())
 
 #system
 @app.get("/minorcineflex")
