@@ -12,6 +12,7 @@ class Cinema {
         -cinema_id: str
         -name: str
         -location: str
+        -region: str
         -opentime: datetime
         -closetime: datetime
         -cinema_management: CinemaManagement
@@ -23,7 +24,6 @@ CinemaManagement o-- Booking
 CinemaManagement o-- Movie
 class CinemaManagement{
         -theater_list: List[Theater]
-        -snack_list: List[Snack]
         -showtime_list: List[Showtime]
         -booking_list: List[Booking]
         -movie_list: List[Movie]
@@ -66,6 +66,7 @@ class Movie {
         -movie_id: str
         -detail: str
         -duration: int
+        -role: str
     }
 
 Theater o-- Maintainance
@@ -104,33 +105,12 @@ class SeatMap {
         -map: list_2d
     }
 
-Seat <|-- DeluxeSeat
-Seat <|-- PremiumSeat
-Seat <|-- HoneymoonSeat
-Seat <|-- FirstClass
-Seat <|-- IMAXSeat
 class Seat {
         -seat_id: str
         -seat_type: str
         -size: int
         -price: float
     }
-class DeluxeSeat {
-
-    }
-class PremiumSeat {
-
-    }
-class HoneymoonSeat {
-
-    }
-class FirstClass {
-
-    }
-class IMAXSeat {
-
-    }
-
 
 class Maintainance {
         -detail: str
