@@ -1,3 +1,4 @@
+from __future__ import annotations 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -122,6 +123,18 @@ class Account:
         self.__expiration_date = expiration_date
         self.__history: List[Booking] = []
         self.__document_list: List[Document] = []
+        self.__reserved_list: List[Seat] = []
+
+    def update_account(self, new_dict_data):
+        self.__username = new_dict_data.username
+        self.__password = new_dict_data.password
+        self.__account_id = new_dict_data.account_id
+        self.__point = new_dict_data.point
+        self.__registered_date = new_dict_data.registered_date
+        self.__expiration_date = new_dict_data.expiration_date
+        self.__history = new_dict_data.history
+        self.__document_list = new_dict_data.document_list
+        self.__reserved_list = new_dict_data.reserved_list
 
     #getter
     @property
@@ -148,6 +161,9 @@ class Account:
     @property
     def document_list(self):
         return self.__document_list
+    @property
+    def reserved_list(self):
+        return self.__reserved_list
 
 class Movie:
     def __init__(self, name: str, img: str, movie_type: str, movie_id: str, detail: str, duration: int):
@@ -190,21 +206,6 @@ class Seat:
         self.__size = size
         self.__price = price
 
-class DeluxeSeat(Seat):
-    pass
-
-class PremiumSeat(Seat):
-    pass
-
-class HoneymoonSeat(Seat):
-    pass
-
-class FirstClass(Seat):
-    pass
-
-class IMAXSeat(Seat):
-    pass
-
 class Maintainance:
     def __init__(self, detail: str, start_date: datetime, end_date: datetime):
         self.__detail = detail
@@ -212,7 +213,7 @@ class Maintainance:
         self.__end_date = end_date
 
 class Booking:
-    def __init__(self, showtime, account_id: str, seat_list: List[Seat], booking_date: datetime, payment_method, total: float):
+    def __init__(self, showtime: Showtime, account_id: str, seat_list: List[Seat], booking_date: datetime, payment_method: Payment, total: float):
         self.__showtime = showtime
         self.__account_id = account_id
         self.__seat_list = seat_list
@@ -239,11 +240,51 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+class SeatResponse(BaseModel):
+    seat_id: str
+    seat_type: str
+    size: int
+    price: float
+
+class MaintainanceResponse(BaseModel):
+    detail: str
+    start_date: datetime
+    end_date: datetime
+
+
+class TheaterResponse(BaseModel):
+    theater_id: str
+    theater_type: str
+    seat_amount: int
+    status: bool
+    audio_type: str
+    video_type: str
+    maintainance_list: List[MaintainanceResponse] = []
+
+class MovieResponse(BaseModel):
+    name: str
+    img: str
+    type: str
+    movie_id: str
+    detail: str
+    duration: int
+
+class ShowtimeResponse(BaseModel):
+    showtime_id: str
+    start_date: datetime
+    cinema: CinemaResponse
+    theater: TheaterResponse
+    movie: MovieResponse
+    dub: bool
+    sub: bool
+    available_seat: List[SeatResponse] = [] 
+    reserved_seat: List[SeatResponse] = []
+
 class CinemaManagementResponse(BaseModel):
-    theater_list: List[dict] 
-    showtime_list: List[dict] 
-    booking_list: List[dict]  
-    movie_list: List[dict] 
+    theater_list: List[TheaterResponse] = []
+    showtime_list: List[ShowtimeResponse] = []
+    booking_list: List[BookingResponse] = []
+    movie_list: List[MovieResponse] = []
 
 class CinemaResponse(BaseModel):
     cinema_id: int
@@ -253,21 +294,39 @@ class CinemaResponse(BaseModel):
     closetime: datetime
     cinema_management: CinemaManagementResponse
 
+class PaymentResponse(BaseModel):
+    payment_type: str
+
+class BookingResponse(BaseModel):
+    showtime: ShowtimeResponse
+    account_id: str
+    seat_list: List[SeatResponse] = []
+    booking_date: datetime
+    payment_method: PaymentResponse
+    total: float
+
 class PersonResponse(BaseModel):
     name: str
     tel_no: str
     email: str
-    birthday: datetime
+    birthday: str
     gender: str
     account: dict
+
+class DocumentResponse(BaseModel):
+    booking: BookingResponse
+    document_type: str
 
 class AccountRequest(BaseModel):
     username: str
     password: str
     account_id: str
     point: int
-    registered_date: datetime
-    expiration_date: datetime
+    registered_date: Optional[datetime]
+    expiration_date: Optional[datetime]
+    history: List[BookingResponse] = []
+    document_list: List[DocumentResponse] = []
+    reserved_list: List[SeatResponse] = []
 
 class PersonRequest(BaseModel):
     name: str
@@ -316,7 +375,8 @@ def system():
                 "registered_date": p.account.registered_date,
                 "expiration_date": p.account.expiration_date,
                 "history": p.account.history,
-                "document_list": p.account.document_list
+                "document_list": p.account.document_list,
+                "reserved_list": p.account.reserved_list
             }
         ) for p in memory_db.person_list]
     }
@@ -340,6 +400,7 @@ def person():
                 "expiration_date": p.account.expiration_date,
                 "history": p.account.history,
                 "document_list": p.account.document_list,
+                "reserved_list": p.account.reserved_list
             }
         ) for p in memory_db.person_list
     ]
@@ -351,20 +412,33 @@ def add_person(person: PersonRequest):
         password=person.account.password,
         account_id=person.account.account_id,
         point=person.account.point,
-        registered_date=person.account.registered_date,
-        expiration_date=person.account.expiration_date
+        registered_date=str(person.account.registered_date),
+        expiration_date=str(person.account.expiration_date)
     )
 
     memory_db.add_person(
         name=person.name,
         tel_no=person.tel_no,
         email=person.email,
-        birthday=person.birthday,
+        birthday=str(person.birthday),
         gender=person.gender,
         account=new_account
     )
-
     return {"message": "Person added successfully"}
+
+@app.put("/minorcineflex/update_person")
+def update_person(person: PersonRequest):
+    person_to_update = None
+    for p in memory_db.person_list:
+        if p.account.account_id == person.account.account_id:
+            person_to_update = p
+            break
+
+    if person_to_update:
+        person_to_update.account.update_account(person.account)
+        return {"message": "Person and account updated successfully"}
+    else:
+        return {"error": "Person not found"}
 
 
 if __name__ == "__main__":
