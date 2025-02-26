@@ -4,7 +4,103 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, time
+
+#instance_data
+movie_data = {
+    "movie_list": [
+        {
+        "name": "Avengers: Endgame",
+        "pic": "https://preview.redd.it/1sdabp4nt2m21.jpg?auto=webp&s=1d3793ac4d16c6dfc457da2dc65cff869221cc80",
+        "type": "Action",
+        "movie_id": "M001",
+        "detail": "Superhero movie",
+        "duration": 180,
+        "role": "on showing"
+        },
+        {
+        "name": "The Boy And The Heron",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/9097ea9099114cf1b23220652c2bf864.jpg",
+        "type": "Fantasy",
+        "movie_id": "M001",
+        "detail": "Fantasy movie",
+        "duration": 124,
+        "role": "recomment"
+        },
+        {
+        "name": "Blue Giant",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/3062bae886c1445dbe99bd09f836fd19.jpg",
+        "type": "Drama",
+        "movie_id": "M001",
+        "detail": "Drama movie",
+        "duration": 120,
+        "role": "recomment"
+        },
+        {
+        "name": "The Hold Over",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/c65abd7d1b3e40ad90397076af1f26cc.jpg",
+        "type": "Comedy",
+        "movie_id": "M001",
+        "detail": "Comedy movie",
+        "duration": 133,
+        "role": "comming soon"
+        },
+        {
+        "name": "Tarot",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/9d9b5e56980a4d15a05e93126db845a8.jpg",
+        "type": "Horror",
+        "movie_id": "M001",
+        "detail": "Horror movie",
+        "duration": 90,
+        "role": "recomment"
+        },
+        {
+        "name": "Kung Fu Panda 4",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/b5dffc5adfb74a0fb6b40c33a87fb52e.jpg",
+        "type": "Comedy",
+        "movie_id": "M001",
+        "detail": "Comedy movie",
+        "duration": 105,
+        "role": "on showing"
+        },
+        {
+        "name": "หลานม่า",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/6b318efc5ca74b5c952ee4ed98ee388b.jpg",
+        "type": "Drama",
+        "movie_id": "M001",
+        "detail": "Drama movie",
+        "duration": 125,
+        "role": "comming soon"
+        },
+        {
+        "name": "The First Omen",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/075827a4cf9a45958fc70fd4ddeb8a9a.jpg",
+        "type": "Horror",
+        "movie_id": "M001",
+        "detail": "Horror movie",
+        "duration": 120,
+        "role": "on showing"
+        },
+        {
+        "name": "Mother's Instinct",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/3db8c14861e84988ac45bd3d96cc5c25.jpg",
+        "type": "Thriller",
+        "movie_id": "M001",
+        "detail": "Thriller movie",
+        "duration": 94,
+        "role": "recomment"
+        },
+        {
+        "name": "Fall Guy",
+        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/95b0ce3451af47f3b5f7e24f847209b1.jpg",
+        "type": "Action",
+        "movie_id": "M001",
+        "detail": "Action movie",
+        "duration": 125,
+        "role": "comming soon"
+        }
+    ]
+}
 
 class MinorCineflex:
     def __init__(self):
@@ -38,6 +134,33 @@ class MinorCineflex:
                 }
             ) for p in memory_db.person_list
         ]
+    
+    def get_cinema(self):
+        return [
+            CinemaResponse(
+                cinema_id=c.cinema_id, 
+                name=c.name, 
+                location=c.location,
+                region=c.region, 
+                opentime=c.opentime, 
+                closetime=c.closetime,
+                cinema_management=CinemaManagementResponse(
+                    theater_list=[theater for theater in c.cinema_management.theater_list],
+                    showtime_list=[showtime for showtime in c.cinema_management.showtime_list],
+                    booking_list=[booking for booking in c.cinema_management.booking_list],
+                    movie_list=[MovieResponse(
+                        name = movie.name,
+                        img = movie.img,
+                        type = movie.type,
+                        movie_id = movie.movie_id,
+                        detail = movie.detail,
+                        duration = movie.duration,
+                        role = movie.role
+                        ) for movie in c.cinema_management.movie_list] 
+                )
+            ) for c in memory_db.cinema_list
+        ]
+
 
     def get_system(self):
         return {
@@ -52,7 +175,15 @@ class MinorCineflex:
                     theater_list=[theater for theater in c.cinema_management.theater_list],
                     showtime_list=[showtime for showtime in c.cinema_management.showtime_list],
                     booking_list=[booking for booking in c.cinema_management.booking_list],
-                    movie_list=[movie for movie in c.cinema_management.movie_list] 
+                    movie_list=[MovieResponse(
+                        name = movie.name,
+                        img = movie.img,
+                        type = movie.type,
+                        movie_id = movie.movie_id,
+                        detail = movie.detail,
+                        duration = movie.duration,
+                        role = movie.role
+                        ) for movie in c.cinema_management.movie_list] 
                 )
             ) for c in memory_db.cinema_list],
             "person_list": [PersonResponse(
@@ -84,7 +215,7 @@ class MinorCineflex:
         return self.__person_list
 
 class Cinema:
-    def __init__(self, cinema_id: str, name: str, location: str,region: str, opentime: datetime, closetime: datetime, cinema_management):
+    def __init__(self, cinema_id: str, name: str, location: str,region: str, opentime: time, closetime: time, cinema_management):
         self.__cinema_id = cinema_id
         self.__name = name
         self.__location = location
@@ -123,8 +254,17 @@ class CinemaManagement:
         self.__booking_list: List[Booking] = []
         self.__movie_list: List[Movie] = []
     
-    def add_theater(self, theater):
+    def add_theater(self, theater: Theater):
         self.__theater_list.append(theater)
+        
+    def add_showtime(self, showtime: Showtime):
+        self.__showtime_list.append(showtime)
+    
+    def add_booking(self, booking: Booking):
+        self.__booking_list.append(booking)
+    
+    def add_movie(self, movie: Movie):
+        self.__movie_list.append(movie)
 
     #getter
     @property
@@ -236,6 +376,29 @@ class Movie:
         self.__detail = detail
         self.__duration = duration
         self.__role = role
+
+    #getter
+    @property
+    def name(self):
+        return self.__name
+    @property
+    def img(self):
+        return self.__img
+    @property
+    def type(self):
+        return self.__type
+    @property
+    def movie_id(self):
+        return self.__movie_id
+    @property
+    def detail(self):
+        return self.__detail
+    @property
+    def duration(self):
+        return self.__duration
+    @property
+    def role(self):
+        return self.__role
 
 class Theater:
     def __init__(self, theater_id: str, theater_type: str, seat_amount: int, status: bool, audio_type: str, video_type: str):
@@ -357,8 +520,8 @@ class CinemaResponse(BaseModel):
     name: str
     location: str
     region: str
-    opentime: datetime
-    closetime: datetime
+    opentime: time
+    closetime: time
     cinema_management: CinemaManagementResponse
 
 class PaymentResponse(BaseModel):
@@ -409,7 +572,20 @@ class MinorCineflexResponse(BaseModel):
 
 #temporary_database
 memory_db = MinorCineflex()
-memory_db.add_cinema(101, "minor_1", "12.001.0656", "nort", datetime.strptime("2011-12-19", "%Y-%m-%d"), datetime.strptime("2020-12-19", "%Y-%m-%d"), CinemaManagement())
+
+#create_instance
+memory_db.add_cinema(101, "minor_1", "12.001.0656", "north", time(11,00,00), time(23,00,00), CinemaManagement())
+for m in movie_data["movie_list"]:
+    memory_db.cinema_list[0].cinema_management.add_movie(
+    Movie(
+        m["name"], 
+        m["pic"],
+        m["type"],
+        m["movie_id"],
+        m["detail"],
+        m["duration"],
+        m["role"]
+    ))
 
 #system
 @app.get("/minorcineflex")
@@ -420,6 +596,11 @@ def system():
 @app.get("/minorcineflex/person")
 def person():
     return memory_db.get_person()
+
+#cinema
+@app.get("/minorcineflex/cinema")
+def cinema():
+    return memory_db.get_cinema()
 
 @app.post("/minorcineflex/add_person")
 def add_person(person: PersonRequest):
