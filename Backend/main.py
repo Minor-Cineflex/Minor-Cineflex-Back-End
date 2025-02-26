@@ -22,43 +22,43 @@ movie_data = {
         "name": "The Boy And The Heron",
         "pic": "https://img.wongnai.com/p/800x0/2024/04/11/9097ea9099114cf1b23220652c2bf864.jpg",
         "type": "Fantasy",
-        "movie_id": "M001",
+        "movie_id": "M002",
         "detail": "Fantasy movie",
         "duration": 124,
-        "role": "recomment"
+        "role": "recommend"
         },
         {
         "name": "Blue Giant",
         "pic": "https://img.wongnai.com/p/800x0/2024/04/11/3062bae886c1445dbe99bd09f836fd19.jpg",
         "type": "Drama",
-        "movie_id": "M001",
+        "movie_id": "M003",
         "detail": "Drama movie",
         "duration": 120,
-        "role": "recomment"
+        "role": "recommend"
         },
         {
         "name": "The Hold Over",
         "pic": "https://img.wongnai.com/p/800x0/2024/04/11/c65abd7d1b3e40ad90397076af1f26cc.jpg",
         "type": "Comedy",
-        "movie_id": "M001",
+        "movie_id": "M004",
         "detail": "Comedy movie",
         "duration": 133,
         "role": "comming soon"
         },
         {
-        "name": "Tarot",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/9d9b5e56980a4d15a05e93126db845a8.jpg",
+        "name": "Let the Right One In",
+        "pic": "https://resizing.flixster.com/SGQAjo7FxNx8IV2FQdOa0T4_rSE=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p183697_p_v12_ao.jpg",
         "type": "Horror",
-        "movie_id": "M001",
+        "movie_id": "M005",
         "detail": "Horror movie",
-        "duration": 90,
-        "role": "recomment"
+        "duration": 114,
+        "role": "recommend"
         },
         {
         "name": "Kung Fu Panda 4",
         "pic": "https://img.wongnai.com/p/800x0/2024/04/11/b5dffc5adfb74a0fb6b40c33a87fb52e.jpg",
         "type": "Comedy",
-        "movie_id": "M001",
+        "movie_id": "M006",
         "detail": "Comedy movie",
         "duration": 105,
         "role": "on showing"
@@ -67,7 +67,7 @@ movie_data = {
         "name": "หลานม่า",
         "pic": "https://img.wongnai.com/p/800x0/2024/04/11/6b318efc5ca74b5c952ee4ed98ee388b.jpg",
         "type": "Drama",
-        "movie_id": "M001",
+        "movie_id": "M007",
         "detail": "Drama movie",
         "duration": 125,
         "role": "comming soon"
@@ -76,7 +76,7 @@ movie_data = {
         "name": "The First Omen",
         "pic": "https://img.wongnai.com/p/800x0/2024/04/11/075827a4cf9a45958fc70fd4ddeb8a9a.jpg",
         "type": "Horror",
-        "movie_id": "M001",
+        "movie_id": "M008",
         "detail": "Horror movie",
         "duration": 120,
         "role": "on showing"
@@ -85,19 +85,64 @@ movie_data = {
         "name": "Mother's Instinct",
         "pic": "https://img.wongnai.com/p/800x0/2024/04/11/3db8c14861e84988ac45bd3d96cc5c25.jpg",
         "type": "Thriller",
-        "movie_id": "M001",
+        "movie_id": "M009",
         "detail": "Thriller movie",
         "duration": 94,
-        "role": "recomment"
+        "role": "recommend"
         },
         {
         "name": "Fall Guy",
         "pic": "https://img.wongnai.com/p/800x0/2024/04/11/95b0ce3451af47f3b5f7e24f847209b1.jpg",
         "type": "Action",
-        "movie_id": "M001",
+        "movie_id": "M010",
         "detail": "Action movie",
         "duration": 125,
         "role": "comming soon"
+        },
+        {
+        "name": "A Quiet Place",
+        "pic": "https://resizing.flixster.com/bly-yHD8oiPG0BGvpfrd9q3SPco=/206x305/v2/https://resizing.flixster.com/or3jxjzmcmu88rC-mcksfO642IU=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzNmYjhmOGMzLWU1YjctNGEyNS04OTJhLWY4YmIwMjNmZmFiMC53ZWJw",
+        "type": "Horror",
+        "movie_id": "M011",
+        "detail": "Horror movie",
+        "duration": 90,
+        "role": "recommend"
+        },
+        {
+        "name": "Talk to Me",
+        "pic": "https://resizing.flixster.com/ejS3S8JOBfvZr_fQ_--6SyKKJpQ=/206x305/v2/https://resizing.flixster.com/9WxKriao1BmRamIaqig2k8hd5uM=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2YyZDQwYTM2LWZmYzEtNGUwMC05NzRkLTA3ODM0NThiNDE4Ny5qcGc=",
+        "type": "Horror",
+        "movie_id": "M012",
+        "detail": "Horror movie",
+        "duration": 95,
+        "role": "recommend"
+        },
+        {
+        "name": "When Evil Lurks",
+        "pic": "https://resizing.flixster.com/pYKve2Su8tEGhH0tDOVXySIZUeQ=/206x305/v2/https://resizing.flixster.com/jRxONmZil0CTIu8L0mZJTbLLGrY=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2FiOWRlZjQ2LTY5OTctNGRmZi1hM2IwLWI5ZWQzYmQ4ZmFkYS5qcGc=",
+        "type": "Horror",
+        "movie_id": "M013",
+        "detail": "Horror movie",
+        "duration": 99,
+        "role": "recommend"
+        },
+        {
+        "name": "The Godfather",
+        "pic": "https://play-lh.googleusercontent.com/C4If2NMZL8v4EJHVXVl9pSI6WlzdCryfYpo5lBqoJ1KR3CzlHVqM65Gnj6qUIjuZ8Ps",
+        "type": "Crime",
+        "movie_id": "M014",
+        "detail": "Crime movie",
+        "duration": 175,
+        "role": "recommend"
+        },
+        {
+        "name": "Inception",
+        "pic": "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
+        "type": "Sci-fi",
+        "movie_id": "M015",
+        "detail": "Sci-fi movie",
+        "duration": 148,
+        "role": "recommend"
         }
     ]
 }
@@ -106,12 +151,16 @@ class MinorCineflex:
     def __init__(self):
         self.__cinema_list: List[Cinema] = []
         self.__person_list: List[Person] = []
+        self.__movie_list: List[Movie] = []
 
     def add_cinema(self, id: int, name: str, location: str, region: str, opentime: datetime, closetime: datetime, cinema_management):
         self.__cinema_list.append(Cinema(id, name, location, region, opentime, closetime, cinema_management))
 
     def add_person(self, name: str, tel_no: str, email: str, birthday: datetime, gender: str, account):
         self.__person_list.append(Person(name, tel_no, email, birthday, gender, account))
+    
+    def add_all_movie(self, name: str, img: str, movie_type: str, movie_id: str, detail: str, duration: int, role: str):
+        self.__movie_list.append(Movie(name, img, movie_type, movie_id, detail, duration, role))
 
     def get_person(self):
         return [
@@ -161,6 +210,18 @@ class MinorCineflex:
             ) for c in memory_db.cinema_list
         ]
 
+    def get_movie(self):
+        return {
+            "movie_list":[MovieResponse(
+                name = movie.name,
+                img = movie.img,
+                type = movie.type,
+                movie_id = movie.movie_id,
+                detail = movie.detail,
+                duration = movie.duration,
+                role = movie.role
+            ) for movie in memory_db.movie_list] 
+        }
 
     def get_system(self):
         return {
@@ -203,7 +264,16 @@ class MinorCineflex:
                     "document_list": p.account.document_list,
                     "reserved_list": p.account.reserved_list
                 }
-            ) for p in memory_db.person_list]
+            ) for p in memory_db.person_list],
+            "movie_list":[MovieResponse(
+                name = movie.name,
+                img = movie.img,
+                type = movie.type,
+                movie_id = movie.movie_id,
+                detail = movie.detail,
+                duration = movie.duration,
+                role = movie.role
+            ) for movie in memory_db.movie_list] 
         }
 
     #getter
@@ -213,6 +283,9 @@ class MinorCineflex:
     @property
     def person_list(self):
         return self.__person_list
+    @property
+    def movie_list(self):
+        return self.__movie_list
 
 class Cinema:
     def __init__(self, cinema_id: str, name: str, location: str,region: str, opentime: time, closetime: time, cinema_management):
@@ -254,17 +327,20 @@ class CinemaManagement:
         self.__booking_list: List[Booking] = []
         self.__movie_list: List[Movie] = []
     
-    def add_theater(self, theater: Theater):
+    def add_cinema_theater(self, theater: Theater):
         self.__theater_list.append(theater)
         
-    def add_showtime(self, showtime: Showtime):
+    def add_cinema_showtime(self, showtime: Showtime):
         self.__showtime_list.append(showtime)
     
-    def add_booking(self, booking: Booking):
+    def add_cinema_booking(self, booking: Booking):
         self.__booking_list.append(booking)
     
-    def add_movie(self, movie: Movie):
-        self.__movie_list.append(movie)
+    def add_cinema_movie(self, movie_id: str):
+        for m in memory_db.movie_list:
+            if movie_id == m.movie_id:
+                self.__movie_list.append(m)
+                return
 
     #getter
     @property
@@ -575,9 +651,9 @@ memory_db = MinorCineflex()
 
 #create_instance
 memory_db.add_cinema(101, "minor_1", "12.001.0656", "north", time(11,00,00), time(23,00,00), CinemaManagement())
+memory_db.add_cinema(102, "minor_2", "13.675.3356", "east", time(11,30,00), time(23,30,00), CinemaManagement())
 for m in movie_data["movie_list"]:
-    memory_db.cinema_list[0].cinema_management.add_movie(
-    Movie(
+    memory_db.add_all_movie(
         m["name"], 
         m["pic"],
         m["type"],
@@ -585,7 +661,9 @@ for m in movie_data["movie_list"]:
         m["detail"],
         m["duration"],
         m["role"]
-    ))
+    )
+memory_db.cinema_list[0].cinema_management.add_cinema_movie("M001")
+memory_db.cinema_list[0].cinema_management.add_cinema_movie("M010")
 
 #system
 @app.get("/minorcineflex")
@@ -596,6 +674,11 @@ def system():
 @app.get("/minorcineflex/person")
 def person():
     return memory_db.get_person()
+
+#movie
+@app.get("/minorcineflex/movie")
+def movie():
+    return memory_db.get_movie()
 
 #cinema
 @app.get("/minorcineflex/cinema")
