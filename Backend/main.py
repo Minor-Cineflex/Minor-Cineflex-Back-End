@@ -128,7 +128,7 @@ movie_data = {
         },
         {
         "name": "The Godfather",
-        "pic": "https://play-lh.googleusercontent.com/C4If2NMZL8v4EJHVXVl9pSI6WlzdCryfYpo5lBqoJ1KR3CzlHVqM65Gnj6qUIjuZ8Ps",
+        "pic": "https://picfiles.alphacoders.com/464/thumb-1920-464751.jpg",
         "type": "Crime",
         "movie_id": "M014",
         "detail": "Crime movie",
@@ -675,16 +675,6 @@ def system():
 def person():
     return memory_db.get_person()
 
-#movie
-@app.get("/minorcineflex/movie")
-def movie():
-    return memory_db.get_movie()
-
-#cinema
-@app.get("/minorcineflex/cinema")
-def cinema():
-    return memory_db.get_cinema()
-
 @app.post("/minorcineflex/add_person")
 def add_person(person: PersonRequest):
     new_account = Account(
@@ -719,6 +709,16 @@ def update_person(person: PersonRequest):
         return {"message": "Person and account updated successfully"}
     else:
         return {"error": "Person not found"}
+
+#movie
+@app.get("/minorcineflex/movie")
+def movie():
+    return memory_db.get_movie()
+
+#cinema
+@app.get("/minorcineflex/cinema")
+def cinema():
+    return memory_db.get_cinema()
 
 
 if __name__ == "__main__":
