@@ -777,7 +777,7 @@ for row in range(1,5):
             seat_type = "Delux",
             size = 1,
             price = 100,
-            seat_pos = f"{chr(64 + row}{col}"
+            seat_pos = f"{chr(64 + row)}{col}"
         ))
 sh.move_seat_from_avai_to_res("Seat001")
 sh.move_seat_from_avai_to_res("Seat002")
