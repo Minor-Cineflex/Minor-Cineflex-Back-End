@@ -194,8 +194,23 @@ class MinorCineflex:
                 opentime=c.opentime, 
                 closetime=c.closetime,
                 cinema_management=CinemaManagementResponse(
-                    theater_list=[theater for theater in c.cinema_management.theater_list],
-                    showtime_list=[showtime for showtime in c.cinema_management.showtime_list],
+                    theater_list=[TheaterResponse(
+                        theater_id=t.theater_id,
+                        theater_type=t.theater_type,
+                        seat_amount=t.seat_amount,
+                        status=t.status,
+                        audio_type=t.audio_type,
+                        video_type=t.video_type,
+                    ) for t in c.cinema_management.theater_list],
+                    showtime_list=[ShowtimeResponse(
+                        showtime_id=s.showtime_id,
+                        start_date=s.start_date,
+                        cinema=s.cinema_id,
+                        theater=s.theater_id,
+                        movie=s.movie_id,
+                        dub=s.dub,
+                        sub=s.sub
+                    ) for s in c.cinema_management.showtime_list],
                     booking_list=[booking for booking in c.cinema_management.booking_list],
                     movie_list=[MovieResponse(
                         name = movie.name,
@@ -210,6 +225,14 @@ class MinorCineflex:
             ) for c in memory_db.cinema_list]
 
         }
+    
+    def get_cinema_by_id(self, cinema_id: int):
+        if(len(self.__cinema_list) > 0):
+            for c in self.__cinema_list:
+                if c.cinema_id == cinema_id:
+                    return c
+        else:
+            return "Failed"
 
     def get_movie(self):
         return {
@@ -364,6 +387,31 @@ class CinemaManagement:
     
     def add_cinema_theater(self, theater: Theater):
         self.__theater_list.append(theater)
+
+    def get_theater(self):
+        return [
+            TheaterResponse(
+                theater_id=t.theater_id,
+                theater_type=t.theater_type,
+                seat_amount=t.seat_amount,
+                status=t.status,
+                audio_type=t.audio_type,
+                video_type=t.video_type,
+                maintainance_list=[MaintainanceResponse(
+                    detail=m.detail,
+                    start_date=m.start_date,
+                    end_date=m.end_date
+                ) for m in t.maintainance_list]
+            ) for t in self.__theater_list
+        ]
+
+    def get_theater_by_id(self, theater_id: str):
+        if(len(self.__theater_list) > 0):
+            for t in self.__theater_list:
+                if t.theater_id == theater_id:
+                    return t
+        else:
+            return "Failed"
         
     def add_cinema_showtime(self, showtime: Showtime):
         self.__showtime_list.append(showtime)
@@ -521,17 +569,81 @@ class Theater:
         self.__video_type = video_type
         self.__maintainance_list: List[Maintainance] = []
 
+    @property
+    def theater_id(self):
+        return self.__theater_id
+    
+    @property
+    def theater_type(self):
+        return self.__theater_type
+    
+    @property
+    def seat_amount(self): 
+        return self.__seat_amount
+    
+    @property
+    def status(self):
+        return self.__status
+    
+    @property
+    def audio_type(self):
+        return self.__audio_type
+    
+    @property
+    def video_type(self):
+        return self.__video_type
+    
+    @property
+    def maintainance_list(self):
+        return self.__maintainance_list
+
 class Showtime:
-    def __init__(self,showtime_id: str, start_date: datetime, cinema, theater, movie, dub: bool, sub: bool):
+    def __init__(self,showtime_id: str, start_date: datetime, cinema_id: str, theater_id: str, movie_id: str, dub: bool, sub: bool):
         self.__showtime_id = showtime_id
         self.__start_date = start_date
-        self.__cinema = cinema
-        self.__theater = theater
-        self.__movie = movie
+        self.__cinema_id = cinema_id
+        self.__theater_id = theater_id
+        self.__movie_id = movie_id
         self.__dub = dub
         self.__sub = sub
         self.__available_seat: List[Seat] = []
         self.__reserved_seat: List[Seat] = []
+
+    @property
+    def showtime_id(self):
+        return self.__showtime_id
+    
+    @property
+    def start_date(self):
+        return self.__start_date
+    
+    @property
+    def cinema_id(self):
+        return self.__cinema_id
+    
+    @property
+    def theater_id(self):
+        return self.__theater_id
+    
+    @property
+    def movie_id(self):
+        return self.__movie_id
+    
+    @property
+    def dub(self):
+        return self.__dub
+    
+    @property
+    def sub(self):
+        return self.__sub
+    
+    @property
+    def available_seat(self):
+        return self.__available_seat
+    
+    @property
+    def reserved_seat(self):
+        return self.__reserved_seat
 
     @property
     def showtime_id(self):
@@ -662,9 +774,9 @@ class MovieResponse(BaseModel):
 class ShowtimeResponse(BaseModel):
     showtime_id: str
     start_date: datetime
-    cinema: CinemaResponse
-    theater: TheaterResponse
-    movie: MovieResponse
+    cinema_id: str
+    theater_id: str
+    movie_id: str
     dub: bool
     sub: bool
     available_seat: List[SeatResponse] = [] 
@@ -768,6 +880,16 @@ for m in movie_data["movie_list"]:
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M001")
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M010")
 
+#create_theater
+memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M101", "IMAX", 32, True, "Dolby Atmos", "IMAX"))
+memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M102", "Standard", 32, True, "Dolby", "Standard"))
+memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M201", "VIP", 32, True, "Dolby Atmos", "VIP"))
+memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M202", "Standard", 32, True, "Dolby", "Standard"))
+
+#create_showtime
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S001", datetime(2025, 3, 3, 12, 30, 00), "101", "T-M101", "M001", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S002", datetime(2025, 3, 3, 15, 30, 00), "101", "T-M102", "M010", True, False))
+
 #create seat instancer ;-;
 sh = memory_db.get_showtime_from_showtime_id("S001")
 for row in range(1,5):
@@ -838,6 +960,15 @@ def movie():
 @app.get("/minorcineflex/cinema")
 def cinema():
     return memory_db.get_cinema()
+
+#theater
+@app.get("/minorcineflex/cinema/{cinema_id}/theater")
+def theater_list(cinema_id: int):
+    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater()
+
+@app.get("/minorcineflex/cinema/{cinema_id}/theater/{theater_id}")
+def theater_by_id(cinema_id: int, theater_id: str):
+    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater_by_id(theater_id)
 
 #getsear
 @app.get("/minorcineflex/seat")
