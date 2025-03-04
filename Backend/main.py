@@ -177,6 +177,22 @@ class MinorCineflex:
                         "reserved_list": p.account.reserved_list
                     }
                 )
+        
+    def search_person_email(self, email: str):
+        for p in self.person_list:
+            if p.email == email:
+                return PersonResponse(name=p.name, tel_no=p.tel_no, email=p.email, birthday=p.birthday, gender=p.gender, account={
+                        "username": p.account.username,
+                        "password": p.account.password,
+                        "account_id": p.account.account_id,
+                        "point": p.account.point,
+                        "registered_date": p.account.registered_date,
+                        "expiration_date": p.account.expiration_date,
+                        "history": p.account.history,
+                        "document_list": p.account.document_list,
+                        "reserved_list": p.account.reserved_list
+                    }
+                )
 
     def get_person(self):
         return [
@@ -458,15 +474,16 @@ class Account:
         self.__reserved_list: List[Seat] = []
 
     def update_account(self, new_dict_data):
-        self.__username = new_dict_data['username']
-        self.__password = new_dict_data['password']
-        self.__account_id = new_dict_data['account_id']
-        self.__point = new_dict_data['point']
-        self.__registered_date = new_dict_data['registered_date']
-        self.__expiration_date = new_dict_data['expiration_date']
-        self.__history = new_dict_data['history']
-        self.__document_list = new_dict_data['document_list']
-        self.__reserved_list = new_dict_data['reserved_list']
+        print("Updating account:", new_dict_data)
+        self.__username = new_dict_data.username
+        self.__password = new_dict_data.password
+        self.__account_id = new_dict_data.account_id
+        self.__point = new_dict_data.point
+        self.__registered_date = new_dict_data.registered_date
+        self.__expiration_date = new_dict_data.expiration_date
+        self.__history = new_dict_data.history
+        self.__document_list = new_dict_data.document_list
+        self.__reserved_list = new_dict_data.reserved_list
 
     #getter
     @property
@@ -787,22 +804,6 @@ for m in movie_data["movie_list"]:
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M001")
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M010")
 
-#create seat instancer ;-;
-sh = memory_db.get_showtime_from_showtime_id("S001")
-for row in range(1,5):
-    for col in range(1,9):
-        sh.append_avaliable_seat(Seat(
-            seat_id = f"Seat{str(8*(row-1) + col).zfill(3)}",
-            seat_type = "Delux",
-            size = 1,
-            price = 100,
-            seat_pos = f"{chr(64 + row)}{col}"
-        ))
-sh.move_seat_from_avai_to_res("Seat001")
-sh.move_seat_from_avai_to_res("Seat002")
-sh.move_seat_from_avai_to_res("Seat003")
-sh.move_seat_from_avai_to_res("Seat004")
-
 #system
 @app.get("/minorcineflex")
 def system():
@@ -816,6 +817,10 @@ def person():
 @app.get("/minorcineflex/person/{account_id}")
 def account_id(account_id: str):
     return memory_db.search_person_account_id(account_id)
+
+@app.get("/minorcineflex/person/email/{email}")
+def email(email: str):
+    return memory_db.search_person_email(email)
 
 @app.post("/minorcineflex/add_person")
 def add_person(person: PersonRequest):
@@ -842,9 +847,8 @@ def update_person(person: PersonRequest):
     is_exist = memory_db.search_person_account_id(person.account.account_id)
     if(is_exist):
         for p in memory_db.person_list:
-            if p.name == is_exist.name:
-                print(is_exist)
-                p.update_person(is_exist)
+            if p.email == is_exist.email:
+                p.update_person(person)
         return {"message": "Person and account updated successfully"}
     else:
         return {"error": "Person not found"}
