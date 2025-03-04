@@ -380,6 +380,27 @@ class CinemaManagement:
         
     def add_cinema_showtime(self, showtime: Showtime):
         self.__showtime_list.append(showtime)
+
+    def get_showtime(self):
+        return [
+            ShowtimeResponse(
+                showtime_id=s.showtime_id,
+                start_date=s.start_date,
+                cinema_id=s.cinema_id,
+                theater_id=s.theater_id,
+                movie_id=s.movie_id,
+                dub=s.dub,
+                sub=s.sub
+            ) for s in self.__showtime_list
+        ]
+
+    def get_showtime_by_id(self, showtime_id: str):
+        if(len(self.__showtime_list) > 0):
+            for s in self.__showtime_list:
+                if s.showtime_id == showtime_id:
+                    return s
+        else:
+            return "Failed"
     
     def add_cinema_booking(self, booking: Booking):
         self.__booking_list.append(booking)
@@ -851,6 +872,14 @@ def theater_list(cinema_id: int):
 def theater_by_id(cinema_id: int, theater_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater_by_id(theater_id)
 
+#Showtime
+@app.get("/minorcineflex/cinema/{cinema_id}/showtime")
+def showtime_list(cinema_id: int):
+    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime()
+
+@app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
+def showtime_by_id(cinema_id: int, showtime_id: str):
+    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime_by_id(showtime_id)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
