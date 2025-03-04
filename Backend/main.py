@@ -185,7 +185,7 @@ class MinorCineflex:
         ]
     
     def get_cinema(self):
-        return [
+        return { "Cinema_list" : [
             CinemaResponse(
                 cinema_id=c.cinema_id, 
                 name=c.name, 
@@ -207,8 +207,9 @@ class MinorCineflex:
                         role = movie.role
                         ) for movie in c.cinema_management.movie_list] 
                 )
-            ) for c in memory_db.cinema_list
-        ]
+            ) for c in memory_db.cinema_list]
+
+        }
 
     def get_movie(self):
         return {
@@ -650,8 +651,26 @@ class MinorCineflexResponse(BaseModel):
 memory_db = MinorCineflex()
 
 #create_instance
-memory_db.add_cinema(101, "minor_1", "12.001.0656", "north", time(11,00,00), time(23,00,00), CinemaManagement())
-memory_db.add_cinema(102, "minor_2", "13.675.3356", "east", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(101, "minor_1", "12.001.0656", "ภาคเหนือ", time(11,00,00), time(23,00,00), CinemaManagement())
+memory_db.add_cinema(102, "minor_2", "13.675.3356", "ภาคตะวันออก", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(103, "minor_3", "13.675.3356", "ภาคกลาง", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(104, "minor_4", "13.675.3356", "ภาคตะวันตก", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(105, "minor_5", "13.675.3356", "ภาคตะวันออกเฉียงเหนือ", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(106, "minor_6", "13.675.3356", "กรุงเทพและปริมณฑล", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(107, "minor_7", "13.675.3356", "ภาคตะวันออก", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(108, "minor_8", "13.675.3356", "กรุงเทพและปริมณฑล", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(109, "minor_9", "13.675.3356", "กรุงเทพและปริมณฑล", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(110, "minor_10", "13.675.3356", "ภาคเหนือ", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(111, "minor_11", "13.675.3356", "ภาคเหนือ", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(112, "minor_12", "13.675.3356", "ภาคตะวันออก", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(113, "minor_13", "13.675.3356", "กรุงเทพและปริมณฑล", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(114, "minor_14", "13.675.3356", "ภาคตะวันออก", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(115, "minor_15", "13.675.3356", "กรุงเทพและปริมณฑล", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(116, "minor_16", "13.675.3356", "ภาคตะวันออก", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(117, "minor_17", "13.675.3356", "กรุงเทพและปริมณฑล", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(118, "minor_18", "13.675.3356", "ภาคตะวันออกเฉียงเหนือ", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(119, "minor_19", "13.675.3356", "ภาคใต้", time(11,30,00), time(23,30,00), CinemaManagement())
+memory_db.add_cinema(120, "minor_20", "13.675.3356", "ภาคใต้", time(11,30,00), time(23,30,00), CinemaManagement())
 for m in movie_data["movie_list"]:
     memory_db.add_all_movie(
         m["name"], 
