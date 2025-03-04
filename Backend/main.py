@@ -864,6 +864,18 @@ def cinema():
     return memory_db.get_cinema()
 
 #theater
+@app.post("/moinorcineflex/cinema/{cinema_id}/add_theater")
+def add_theater(cinema_id: int, theater: TheaterResponse):
+    memory_db.get_cinema_by_id(cinema_id).cinema_management.add_cinema_theater(Theater(
+        theater_id=theater.theater_id,
+        theater_type=theater.theater_type,
+        seat_amount=theater.seat_amount,
+        status=theater.status,
+        audio_type=theater.audio_type,
+        video_type=theater.video_type
+    ))
+    return {"message": "Theater added successfully"}
+
 @app.get("/minorcineflex/cinema/{cinema_id}/theater")
 def theater_list(cinema_id: int):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater()
