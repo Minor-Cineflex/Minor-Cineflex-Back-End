@@ -864,6 +864,10 @@ def cinema():
     return memory_db.get_cinema()
 
 #theater
+@app.get("/minorcineflex/cinema/{cinema_id}/theater")
+def theater_list(cinema_id: int):
+    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater()
+
 @app.post("/moinorcineflex/cinema/{cinema_id}/add_theater")
 def add_theater(cinema_id: int, theater: TheaterResponse):
     memory_db.get_cinema_by_id(cinema_id).cinema_management.add_cinema_theater(Theater(
@@ -876,10 +880,6 @@ def add_theater(cinema_id: int, theater: TheaterResponse):
     ))
     return {"message": "Theater added successfully"}
 
-@app.get("/minorcineflex/cinema/{cinema_id}/theater")
-def theater_list(cinema_id: int):
-    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater()
-
 @app.get("/minorcineflex/cinema/{cinema_id}/theater/{theater_id}")
 def theater_by_id(cinema_id: int, theater_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater_by_id(theater_id)
@@ -888,6 +888,19 @@ def theater_by_id(cinema_id: int, theater_id: str):
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime")
 def showtime_list(cinema_id: int):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime()
+
+@app.post("/minorcineflex/cinema/{cinema_id}/add_showtime")
+def add_showtime(cinema_id: int, showtime: ShowtimeResponse):
+    memory_db.get_cinema_by_id(cinema_id).cinema_management.add_cinema_showtime(Showtime(
+        showtime_id=showtime.showtime_id,
+        start_date=showtime.start_date,
+        cinema_id=showtime.cinema_id,
+        theater_id=showtime.theater_id,
+        movie_id=showtime.movie_id,
+        dub=showtime.dub,
+        sub=showtime.sub
+    ))
+    return {"message": "Showtime added successfully"}
 
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
 def showtime_by_id(cinema_id: int, showtime_id: str):
