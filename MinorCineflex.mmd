@@ -5,6 +5,15 @@ MinorCineflex o-- Person
 class MinorCineflex{
         -cinema_list: List[Cinema]
         -person_list: List[Person]
+        -movie_list: List[Movie]
+        +add_cinema()
+        +add_person()
+        +add_all_movie()
+        +search_person_account_id()
+        +get_person()
+        +get_cinema()
+        +get_movie()
+        +get_system()
     }
 
 Cinema --> CinemaManagement
@@ -27,6 +36,10 @@ class CinemaManagement{
         -showtime_list: List[Showtime]
         -booking_list: List[Booking]
         -movie_list: List[Movie]
+        +add_cinema_theater()
+        +add_cinema_showtime()
+        +add_cinema_booking()
+        +add_cinema_movie()
     }
 
 Person <|-- User
@@ -39,6 +52,7 @@ class Person {
         -birthday: datetime
         -gender: str
         -account: Account
+        +update_person()
     }
 class User {
 
@@ -59,10 +73,12 @@ class Account {
         -history: List[Booking]
         -document_list: List[Document]
         -reserved_seat: List[Seat]
+        +update_account()
     }   
 
 class Movie {
         -name: str
+        -img: str
         -type: str
         -movie_id: str
         -detail: str
