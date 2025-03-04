@@ -205,9 +205,9 @@ class MinorCineflex:
                     showtime_list=[ShowtimeResponse(
                         showtime_id=s.showtime_id,
                         start_date=s.start_date,
-                        cinema=s.cinema_id,
-                        theater=s.theater_id,
-                        movie=s.movie_id,
+                        cinema_id=s.cinema_id,
+                        theater_id=s.theater_id,
+                        movie_id=s.movie_id,
                         dub=s.dub,
                         sub=s.sub
                     ) for s in c.cinema_management.showtime_list],
@@ -314,15 +314,15 @@ class MinorCineflex:
         sh = self.get_showtime_from_showtime_id(showtime_id)
         if sh :
             return {
-                "seat" : [SeatResponse(seat_id= seat.seat_id,
+                "Seat" : [SeatResponse(seat_id= seat.seat_id,
                                        seat_type=seat.seat_type,
                                        size=seat.size,
                                        price=seat.price,
                                        status=True,
                                        row = seat.seat_pos[0],
                                        col = int(seat.seat_pos[1:])
-                                       ) for seat in sh.available_seat + 
-                          SeatResponse(seat_id= seat.seat_id,
+                                       ) for seat in sh.available_seat] + 
+                          [SeatResponse(seat_id= seat.seat_id,
                                        seat_type=seat.seat_type,
                                        size=seat.size,
                                        price=seat.price,
@@ -899,12 +899,14 @@ for row in range(1,5):
             seat_type = "Delux",
             size = 1,
             price = 100,
-            seat_pos = f"{chr(64 + row}{col}"
+            seat_pos = f"{chr(64 + row)}{col}"
         ))
 sh.move_seat_from_avai_to_res("Seat001")
 sh.move_seat_from_avai_to_res("Seat002")
 sh.move_seat_from_avai_to_res("Seat003")
 sh.move_seat_from_avai_to_res("Seat004")
+sh.move_seat_from_avai_to_res("Seat018")
+sh.move_seat_from_avai_to_res("Seat019")
 
 #system
 @app.get("/minorcineflex")
@@ -971,9 +973,9 @@ def theater_by_id(cinema_id: int, theater_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater_by_id(theater_id)
 
 #getsear
-@app.get("/minorcineflex/seat")
-def seat(showtimeid:str):
-    return memory_db.get_seat(showtimeid)
+@app.get("/minorcineflex/seat/{showtime_id}")
+def seat(showtime_id:str):
+    return memory_db.get_seat(showtime_id)
 
 
 if __name__ == "__main__":
