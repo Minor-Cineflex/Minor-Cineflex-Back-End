@@ -276,6 +276,40 @@ class MinorCineflex:
                 role = movie.role
             ) for movie in memory_db.movie_list] 
         }
+    
+
+    def get_showtime_from_showtime_id(self,sh_id):
+        for c in self.cinema_list:
+            cm = c.cinema_management
+            for s in cm.showtime_list:
+                if s.showtime_id == sh_id:
+                    return s
+        return None
+
+
+    def get_seat(self,showtime_id:str):
+        sh = self.get_showtime_from_showtime_id(showtime_id)
+        if sh :
+            return {
+                "seat" : [SeatResponse(seat_id= seat.seat_id,
+                                       seat_type=seat.seat_type,
+                                       size=seat.size,
+                                       price=seat.price,
+                                       status=True,
+                                       row = seat.seat_pos[0],
+                                       col = int(seat.seat_pos[1:])
+                                       ) for seat in sh.available_seat + 
+                          SeatResponse(seat_id= seat.seat_id,
+                                       seat_type=seat.seat_type,
+                                       size=seat.size,
+                                       price=seat.price,
+                                       status=False,
+                                       row = seat.seat_pos[0],
+                                       col = int(seat.seat_pos[1:])
+                                       ) for seat in sh.reserved_seat]
+            }
+
+
 
     #getter
     @property
@@ -499,16 +533,63 @@ class Showtime:
         self.__available_seat: List[Seat] = []
         self.__reserved_seat: List[Seat] = []
 
+    @property
+    def showtime_id(self):
+        return self.__showtime_id
+    
+    @property
+    def available_seat(self):
+        return self.__available_seat
+    
+    @property
+    def reserved_seat(self):
+        return self.__reserved_seat
+    
+    def append_avaliable_seat(self,seat:Seat):
+        self.__available_seat.append(seat)
+
+    def append_reserved_seat(self,seat:Seat):
+        self.__reserved_seat.append(seat)
+
+    def move_seat_from_avai_to_res(self,seat_id):
+        for seat in self.__available_seat[:]:  #copy of list
+            if seat.seat_id == seat_id:
+                self.append_reserved_seat(seat)
+                self.__available_seat.remove(seat)
+                return
+
 class Payment:
     def __init__(self, payment_type: str):
         self.__payment_type = payment_type
 
 class Seat:
-    def __init__(self, seat_id: str, seat_type: str, size: int, price: float):
+    def __init__(self, seat_id: str, seat_type: str, size: int, price: float, seat_pos: str):
         self.__seat_id = seat_id
+        self.__seat_pos = seat_pos   # A1, A2, B1, ...............
         self.__seat_type = seat_type
         self.__size = size
         self.__price = price
+
+    @property
+    def seat_id(self):
+        return self.__seat_id
+    
+    @property
+    def seat_pos(self):
+        return self.__seat_pos
+    
+    @property
+    def seat_type(self):
+        return self.__seat_type
+    
+    @property
+    def size(self):
+        return self.__size
+    
+    @property
+    def price(self):
+        return self.__price
+    
 
 class Maintainance:
     def __init__(self, detail: str, start_date: datetime, end_date: datetime):
@@ -550,6 +631,9 @@ class SeatResponse(BaseModel):
     seat_type: str
     size: int
     price: float
+    status: bool
+    row: str
+    col : int
 
 class MaintainanceResponse(BaseModel):
     detail: str
@@ -684,6 +768,22 @@ for m in movie_data["movie_list"]:
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M001")
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M010")
 
+#create seat instancer ;-;
+sh = memory_db.get_showtime_from_showtime_id("S001")
+for row in range(1,5):
+    for col in range(1,9):
+        sh.append_avaliable_seat(Seat(
+            seat_id = f"Seat{str(8*(row-1) + col).zfill(3)}",
+            seat_type = "Delux",
+            size = 1,
+            price = 100,
+            seat_pos = f"{chr(64 + row}{col}"
+        ))
+sh.move_seat_from_avai_to_res("Seat001")
+sh.move_seat_from_avai_to_res("Seat002")
+sh.move_seat_from_avai_to_res("Seat003")
+sh.move_seat_from_avai_to_res("Seat004")
+
 #system
 @app.get("/minorcineflex")
 def system():
@@ -738,6 +838,11 @@ def movie():
 @app.get("/minorcineflex/cinema")
 def cinema():
     return memory_db.get_cinema()
+
+#getsear
+@app.get("/minorcineflex/seat")
+def seat(showtimeid:str):
+    return memory_db.get_seat(showtimeid)
 
 
 if __name__ == "__main__":
