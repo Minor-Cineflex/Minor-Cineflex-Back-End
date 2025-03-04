@@ -205,9 +205,9 @@ class MinorCineflex:
                     showtime_list=[ShowtimeResponse(
                         showtime_id=s.showtime_id,
                         start_date=s.start_date,
-                        cinema=s.cinema_id,
-                        theater=s.theater_id,
-                        movie=s.movie_id,
+                        cinema_id=s.cinema_id,
+                        theater_id=s.theater_id,
+                        movie_id=s.movie_id,
                         dub=s.dub,
                         sub=s.sub
                     ) for s in c.cinema_management.showtime_list],
