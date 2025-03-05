@@ -775,6 +775,26 @@ class PersonLoginRequest(BaseModel):
 memory_db = MinorCineflex()
 
 #create_instance
+memory_db.add_person("person1", "", "person1@gmail.com", datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S.%f%z"), "male", 
+    Account(
+        "user1", 
+        "1111", 
+        "Gxcw1A4e", 
+        0, 
+        datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S.%f%z"), 
+        datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S.%f%z")
+        )
+    )
+memory_db.add_person("person2", "", "person2@gmail.com", datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S.%f%z"), "female", 
+    Account(
+        "user2", 
+        "2222", 
+        "sZXe32A",
+        0, 
+        datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S.%f%z"), 
+        datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S.%f%z")
+        )
+    )
 memory_db.add_cinema(101, "minor_1", "12.001.0656", "ภาคเหนือ", time(11,00,00), time(23,00,00), CinemaManagement())
 memory_db.add_cinema(102, "minor_2", "13.675.3356", "ภาคตะวันออก", time(11,30,00), time(23,30,00), CinemaManagement())
 memory_db.add_cinema(103, "minor_3", "13.675.3356", "ภาคกลาง", time(11,30,00), time(23,30,00), CinemaManagement())
