@@ -806,11 +806,14 @@ memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M202", 
 
 #create_showtime
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S001", datetime(2025, 3, 3, 12, 30, 00), "101", "T-M101", "M001", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S011", datetime(2025, 3, 3, 15, 30, 00), "101", "T-M101", "M001", True, False))
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S002", datetime(2025, 3, 3, 15, 30, 00), "101", "T-M102", "M010", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S012", datetime(2025, 3, 3, 18, 30, 00), "101", "T-M102", "M010", True, False))
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S003", datetime(2025, 3, 4, 18, 30, 00), "101", "T-M101", "M002", True, False))
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S004", datetime(2025, 3, 4, 21, 30, 00), "101", "T-M102", "M003", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S005", datetime(2025, 3, 5, 12, 30, 00), "101", "T-M201", "M004", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S006", datetime(2025, 3, 5, 15, 30, 00), "101", "T-M202", "M005", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S005", datetime(2025, 3, 5, 21, 30, 00), "101", "T-M101", "M004", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S006", datetime(2025, 3, 5, 12, 30, 00), "101", "T-M102", "M005", True, False))
+
 
 #system
 @app.get("/minorcineflex")
