@@ -799,14 +799,16 @@ memory_db.cinema_list[0].cinema_management.add_cinema_movie("M001")
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M010")
 
 #create_theater
-memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M101", "IMAX", 32, True, "Dolby Atmos", "IMAX"))
+memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M101", "IMAX", 32, True, "Dolby", "IMAX"))
 memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M102", "Standard", 32, True, "Dolby", "Standard"))
-memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M201", "VIP", 32, True, "Dolby Atmos", "VIP"))
+memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M201", "VIP", 32, True, "Dolby", "VIP"))
 memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M202", "Standard", 32, True, "Dolby", "Standard"))
 
 #create_showtime
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S001", datetime(2025, 3, 3, 12, 30, 00), "101", "T-M101", "M001", True, False))
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S002", datetime(2025, 3, 3, 15, 30, 00), "101", "T-M102", "M010", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S003", datetime(2025, 3, 3, 18, 30, 00), "101", "T-M101", "M001", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S004", datetime(2025, 3, 3, 21, 30, 00), "101", "T-M102", "M010", True, False))
 
 #system
 @app.get("/minorcineflex")
@@ -868,7 +870,7 @@ def cinema():
 def theater_list(cinema_id: int):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater()
 
-@app.post("/moinorcineflex/cinema/{cinema_id}/add_theater")
+@app.post("/minorcineflex/cinema/{cinema_id}/add_theater")
 def add_theater(cinema_id: int, theater: TheaterResponse):
     memory_db.get_cinema_by_id(cinema_id).cinema_management.add_cinema_theater(Theater(
         theater_id=theater.theater_id,
