@@ -525,7 +525,7 @@ class Account:
         self.__expiration_date = expiration_date
         self.__history: List[Booking] = []
         self.__document_list: List[Document] = []
-        self.__reserved_list: List[Seat] = []
+        self.__reserved_list: List[str] = []
 
     def update_account(self, new_dict_data):
         self.__username = new_dict_data.username
@@ -538,8 +538,8 @@ class Account:
         self.__document_list = new_dict_data.document_list
         self.__reserved_list = new_dict_data.reserved_list
 
-    def append_to_reserve_seat(self,seat: Seat):
-        self.__reserved_list.append(seat)
+    def append_to_reserve_seat(self,seat_id: str):
+        self.__reserved_list.append(seat_id)
 
     #getter
     @property
@@ -1106,8 +1106,7 @@ def reserved_seat(input: SeatReservationRespnd):
     acc = memory_db.get_account_from_userId(user_id)
     show = memory_db.get_showtime_from_showtime_id(showtime_id)
     for s in seat_list:
-        seat = show.get_seat_from_id(s)
-        acc.append_to_reserve_seat(seat)
+        acc.append_to_reserve_seat(s)
         show.move_seat_from_avai_to_res(s)
     return 
         
