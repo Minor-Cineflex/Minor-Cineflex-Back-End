@@ -332,7 +332,12 @@ class MinorCineflex:
                                        ) for seat in sh.reserved_seat]
             }
 
-
+    def get_account_from_userId(self,user_id):
+        for p in self.person_list :
+            if p.account.account_id == user_id:
+                return p.account
+        return None
+    
 
     #getter
     @property
@@ -496,6 +501,9 @@ class Account:
         self.__history = new_dict_data.history
         self.__document_list = new_dict_data.document_list
         self.__reserved_list = new_dict_data.reserved_list
+
+    def append_to_reserve_seat(self,seat: Seat):
+        self.__reserved_list.append(seat)
 
     #getter
     @property
@@ -669,6 +677,12 @@ class Showtime:
                 self.append_reserved_seat(seat)
                 self.__available_seat.remove(seat)
                 return
+    
+    def get_seat_from_id(self,seat_id):
+        for s in self.available_seat:
+            if s.seat_id == seat_id:
+                return s
+        return None
 
 class Payment:
     def __init__(self, payment_type: str):
@@ -843,6 +857,12 @@ class MinorCineflexResponse(BaseModel):
     cinema_list: List[CinemaResponse]
     person_list: List[PersonResponse]
 
+class SeatReservationRespnd(BaseModel):
+    user_id: str
+    showtime_id : str
+    outputSeat: List[str] 
+
+
 #temporary_database
 memory_db = MinorCineflex()
 
@@ -895,18 +915,18 @@ sh = memory_db.get_showtime_from_showtime_id("S001")
 for row in range(1,5):
     for col in range(1,9):
         sh.append_avaliable_seat(Seat(
-            seat_id = f"Seat{str(8*(row-1) + col).zfill(3)}",
+            seat_id = f"Seat{str(8*(row-1) + col).zfill(5)}",
             seat_type = "Delux",
             size = 1,
             price = 100,
             seat_pos = f"{chr(64 + row)}{col}"
         ))
-sh.move_seat_from_avai_to_res("Seat001")
-sh.move_seat_from_avai_to_res("Seat002")
-sh.move_seat_from_avai_to_res("Seat003")
-sh.move_seat_from_avai_to_res("Seat004")
-sh.move_seat_from_avai_to_res("Seat018")
-sh.move_seat_from_avai_to_res("Seat019")
+sh.move_seat_from_avai_to_res("Seat00001")
+sh.move_seat_from_avai_to_res("Seat00002")
+sh.move_seat_from_avai_to_res("Seat00003")
+sh.move_seat_from_avai_to_res("Seat00004")
+sh.move_seat_from_avai_to_res("Seat00018")
+sh.move_seat_from_avai_to_res("Seat00019")
 
 #system
 @app.get("/minorcineflex")
@@ -972,11 +992,27 @@ def theater_list(cinema_id: int):
 def theater_by_id(cinema_id: int, theater_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater_by_id(theater_id)
 
-#getsear
+#getseat
 @app.get("/minorcineflex/seat/{showtime_id}")
 def seat(showtime_id:str):
     return memory_db.get_seat(showtime_id)
 
+
+
+@app.put("/minorcineflex/reserve_seat")
+def reserved_seat(input: SeatReservationRespnd):
+    seat_list = input.outputSeat
+    user_id = input.user_id
+    showtime_id  = input.showtime_id
+
+    acc = memory_db.get_account_from_userId(user_id)
+    show = memory_db.get_showtime_from_showtime_id(showtime_id)
+    for s in seat_list:
+        seat = show.get_seat_from_id(s)
+        acc.append_to_reserve_seat(seat)
+        show.move_seat_from_avai_to_res(s)
+    return 
+        
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
