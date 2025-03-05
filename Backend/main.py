@@ -865,6 +865,19 @@ def update_person(person: PersonRequest):
 def movie():
     return memory_db.get_movie()
 
+@app.post("/minorcineflex/add_movie")
+def add_movie(movie: MovieResponse):
+    memory_db.add_all_movie(
+        name=movie.name,
+        img=movie.img,
+        movie_type=movie.type,
+        movie_id=movie.movie_id,
+        detail=movie.detail,
+        duration=movie.duration,
+        role=movie.role
+    )
+    return {"message": "Movie added successfully"}
+
 #cinema
 @app.get("/minorcineflex/cinema")
 def cinema():
