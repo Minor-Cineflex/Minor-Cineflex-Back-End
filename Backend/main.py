@@ -1,6 +1,6 @@
 from __future__ import annotations 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
@@ -165,34 +165,13 @@ class MinorCineflex:
     def search_person_account_id(self, account_id: str):
         for p in self.person_list:
             if p.account.account_id == account_id:
-                return PersonResponse(name=p.name, tel_no=p.tel_no, email=p.email, birthday=p.birthday, gender=p.gender, account={
-                        "username": p.account.username,
-                        "password": p.account.password,
-                        "account_id": p.account.account_id,
-                        "point": p.account.point,
-                        "registered_date": p.account.registered_date,
-                        "expiration_date": p.account.expiration_date,
-                        "history": p.account.history,
-                        "document_list": p.account.document_list,
-                        "reserved_list": p.account.reserved_list
-                    }
-                )
+                return p
         
     def search_person_email(self, email: str):
         for p in self.person_list:
             if p.email == email:
-                return PersonResponse(name=p.name, tel_no=p.tel_no, email=p.email, birthday=p.birthday, gender=p.gender, account={
-                        "username": p.account.username,
-                        "password": p.account.password,
-                        "account_id": p.account.account_id,
-                        "point": p.account.point,
-                        "registered_date": p.account.registered_date,
-                        "expiration_date": p.account.expiration_date,
-                        "history": p.account.history,
-                        "document_list": p.account.document_list,
-                        "reserved_list": p.account.reserved_list
-                    }
-                )
+                return p
+        return False
 
     def get_person(self):
         return [
@@ -435,6 +414,28 @@ class Person:
     def update_person(self, person_to_update):
         self.account.update_account(person_to_update.account)
 
+    def check_account_password(self, password):
+        if(self.account.password == password and self.account.password != ""):
+            return PersonResponse(
+                name=self.name,
+                tel_no=self.tel_no,
+                email=self.email,
+                birthday=self.birthday,
+                gender=self.gender,
+                account={
+                    "username": self.account.username,
+                    "password": self.account.password,
+                    "account_id": self.account.account_id,
+                    "point": self.account.point,
+                    "registered_date": self.account.registered_date,
+                    "expiration_date": self.account.expiration_date,
+                    "history": self.account.history,
+                    "document_list": self.account.document_list,
+                    "reserved_list": self.account.reserved_list
+                }
+            )
+        return False
+
     #getter
     @property
     def name(self):
@@ -474,7 +475,6 @@ class Account:
         self.__reserved_list: List[Seat] = []
 
     def update_account(self, new_dict_data):
-        print("Updating account:", new_dict_data)
         self.__username = new_dict_data.username
         self.__password = new_dict_data.password
         self.__account_id = new_dict_data.account_id
@@ -767,6 +767,10 @@ class MinorCineflexResponse(BaseModel):
     person_list: List[PersonResponse]
     movie_list: List[MovieResponse]
 
+class PersonLoginRequest(BaseModel):
+    email: str
+    password: str
+
 #temporary_database
 memory_db = MinorCineflex()
 
@@ -814,13 +818,38 @@ def system():
 def person():
     return memory_db.get_person()
 
-@app.get("/minorcineflex/person/{account_id}")
+@app.get("/minorcineflex/person/email/{account_id}")
 def account_id(account_id: str):
-    return memory_db.search_person_account_id(account_id)
+    p = memory_db.search_person_account_id(account_id)
+    return PersonResponse(name=p.name, tel_no=p.tel_no, email=p.email, birthday=p.birthday, gender=p.gender, account={
+                        "username": p.account.username,
+                        "password": p.account.password,
+                        "account_id": p.account.account_id,
+                        "point": p.account.point,
+                        "registered_date": p.account.registered_date,
+                        "expiration_date": p.account.expiration_date,
+                        "history": p.account.history,
+                        "document_list": p.account.document_list,
+                        "reserved_list": p.account.reserved_list
+                    }
+                )
 
-@app.get("/minorcineflex/person/email/{email}")
+@app.get("/minorcineflex/person/{email}")
 def email(email: str):
-    return memory_db.search_person_email(email)
+    p = memory_db.search_person_email(email)
+    if(p):
+        return PersonResponse(name=p.name, tel_no=p.tel_no, email=p.email, birthday=p.birthday, gender=p.gender, account={
+                            "username": p.account.username,
+                            "password": p.account.password,
+                            "account_id": p.account.account_id,
+                            "point": p.account.point,
+                            "registered_date": p.account.registered_date,
+                            "expiration_date": p.account.expiration_date,
+                            "history": p.account.history,
+                            "document_list": p.account.document_list,
+                            "reserved_list": p.account.reserved_list
+                        }
+                    )
 
 @app.post("/minorcineflex/add_person")
 def add_person(person: PersonRequest):
@@ -844,14 +873,23 @@ def add_person(person: PersonRequest):
 
 @app.put("/minorcineflex/update_person")
 def update_person(person: PersonRequest):
-    is_exist = memory_db.search_person_account_id(person.account.account_id)
-    if(is_exist):
-        for p in memory_db.person_list:
-            if p.email == is_exist.email:
-                p.update_person(person)
+    p = memory_db.search_person_account_id(person.account.account_id)
+    if(p):
+        p.update_person(person)
         return {"message": "Person and account updated successfully"}
-    else:
-        return {"error": "Person not found"}
+    return {"error": "Person not found"}
+
+#Login 
+@app.post("/minorcineflex/login")
+def login(login_request: PersonLoginRequest):
+    p = memory_db.search_person_email(login_request.email)
+    if not p:
+        raise HTTPException(status_code=404, detail="Not found an email ")
+    is_valid = p.check_account_password(login_request.password)
+    print(is_valid)
+    if not is_valid:
+        raise HTTPException(status_code=401, detail="Incorrect password")
+    return is_valid
 
 #movie
 @app.get("/minorcineflex/movie")
@@ -863,7 +901,7 @@ def movie():
 def cinema():
     return memory_db.get_cinema()
 
-#getsear
+#getseat
 @app.get("/minorcineflex/seat")
 def seat(showtimeid:str):
     return memory_db.get_seat(showtimeid)
