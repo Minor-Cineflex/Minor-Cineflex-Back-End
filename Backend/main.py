@@ -269,8 +269,24 @@ class MinorCineflex:
                 opentime=c.opentime, 
                 closetime=c.closetime,
                 cinema_management=CinemaManagementResponse(
-                    theater_list=[theater for theater in c.cinema_management.theater_list],
-                    showtime_list=[showtime for showtime in c.cinema_management.showtime_list],
+                    theater_list=[TheaterResponse(
+                        theater_id=t.theater_id,
+                        theater_name=t.theater_name,
+                        theater_type=t.theater_type,
+                        seat_amount=t.seat_amount,
+                        status=t.status,
+                        audio_type=t.audio_type,
+                        video_type=t.video_type,
+                    ) for t in c.cinema_management.theater_list],
+                    showtime_list=[ShowtimeResponse(
+                        showtime_id=s.showtime_id,
+                        start_date=s.start_date,
+                        cinema_id=s.cinema_id,
+                        theater_id=s.theater_id,
+                        movie_id=s.movie_id,
+                        dub=s.dub,
+                        sub=s.sub
+                        ) for s in c.cinema_management.showtime_list],
                     booking_list=[booking for booking in c.cinema_management.booking_list],
                     movie_list=[MovieResponse(
                         name = movie.name,
