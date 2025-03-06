@@ -11,7 +11,7 @@ movie_data = {
     "movie_list": [
         {
         "name": "Avengers: Endgame",
-        "pic": "https://preview.redd.it/1sdabp4nt2m21.jpg?auto=webp&s=1d3793ac4d16c6dfc457da2dc65cff869221cc80",
+        "img": "https://preview.redd.it/1sdabp4nt2m21.jpg?auto=webp&s=1d3793ac4d16c6dfc457da2dc65cff869221cc80",
         "type": "Action",
         "movie_id": "M001",
         "detail": "Superhero movie",
@@ -20,7 +20,7 @@ movie_data = {
         },
         {
         "name": "The Boy And The Heron",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/9097ea9099114cf1b23220652c2bf864.jpg",
+        "img": "https://img.wongnai.com/p/800x0/2024/04/11/9097ea9099114cf1b23220652c2bf864.jpg",
         "type": "Fantasy",
         "movie_id": "M002",
         "detail": "Fantasy movie",
@@ -29,7 +29,7 @@ movie_data = {
         },
         {
         "name": "Blue Giant",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/3062bae886c1445dbe99bd09f836fd19.jpg",
+        "img": "https://img.wongnai.com/p/800x0/2024/04/11/3062bae886c1445dbe99bd09f836fd19.jpg",
         "type": "Drama",
         "movie_id": "M003",
         "detail": "Drama movie",
@@ -38,7 +38,7 @@ movie_data = {
         },
         {
         "name": "The Hold Over",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/c65abd7d1b3e40ad90397076af1f26cc.jpg",
+        "img": "https://img.wongnai.com/p/800x0/2024/04/11/c65abd7d1b3e40ad90397076af1f26cc.jpg",
         "type": "Comedy",
         "movie_id": "M004",
         "detail": "Comedy movie",
@@ -47,7 +47,7 @@ movie_data = {
         },
         {
         "name": "Let the Right One In",
-        "pic": "https://resizing.flixster.com/SGQAjo7FxNx8IV2FQdOa0T4_rSE=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p183697_p_v12_ao.jpg",
+        "img": "https://resizing.flixster.com/SGQAjo7FxNx8IV2FQdOa0T4_rSE=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p183697_p_v12_ao.jpg",
         "type": "Horror",
         "movie_id": "M005",
         "detail": "Horror movie",
@@ -56,7 +56,7 @@ movie_data = {
         },
         {
         "name": "Kung Fu Panda 4",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/b5dffc5adfb74a0fb6b40c33a87fb52e.jpg",
+        "img": "https://img.wongnai.com/p/800x0/2024/04/11/b5dffc5adfb74a0fb6b40c33a87fb52e.jpg",
         "type": "Comedy",
         "movie_id": "M006",
         "detail": "Comedy movie",
@@ -65,7 +65,7 @@ movie_data = {
         },
         {
         "name": "หลานม่า",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/6b318efc5ca74b5c952ee4ed98ee388b.jpg",
+        "img": "https://img.wongnai.com/p/800x0/2024/04/11/6b318efc5ca74b5c952ee4ed98ee388b.jpg",
         "type": "Drama",
         "movie_id": "M007",
         "detail": "Drama movie",
@@ -74,7 +74,7 @@ movie_data = {
         },
         {
         "name": "The First Omen",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/075827a4cf9a45958fc70fd4ddeb8a9a.jpg",
+        "img": "https://img.wongnai.com/p/800x0/2024/04/11/075827a4cf9a45958fc70fd4ddeb8a9a.jpg",
         "type": "Horror",
         "movie_id": "M008",
         "detail": "Horror movie",
@@ -83,7 +83,7 @@ movie_data = {
         },
         {
         "name": "Mother's Instinct",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/3db8c14861e84988ac45bd3d96cc5c25.jpg",
+        "img": "https://img.wongnai.com/p/800x0/2024/04/11/3db8c14861e84988ac45bd3d96cc5c25.jpg",
         "type": "Thriller",
         "movie_id": "M009",
         "detail": "Thriller movie",
@@ -92,7 +92,7 @@ movie_data = {
         },
         {
         "name": "Fall Guy",
-        "pic": "https://img.wongnai.com/p/800x0/2024/04/11/95b0ce3451af47f3b5f7e24f847209b1.jpg",
+        "img": "https://img.wongnai.com/p/800x0/2024/04/11/95b0ce3451af47f3b5f7e24f847209b1.jpg",
         "type": "Action",
         "movie_id": "M010",
         "detail": "Action movie",
@@ -101,7 +101,7 @@ movie_data = {
         },
         {
         "name": "A Quiet Place",
-        "pic": "https://resizing.flixster.com/bly-yHD8oiPG0BGvpfrd9q3SPco=/206x305/v2/https://resizing.flixster.com/or3jxjzmcmu88rC-mcksfO642IU=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzNmYjhmOGMzLWU1YjctNGEyNS04OTJhLWY4YmIwMjNmZmFiMC53ZWJw",
+        "img": "https://resizing.flixster.com/bly-yHD8oiPG0BGvpfrd9q3SPco=/206x305/v2/https://resizing.flixster.com/or3jxjzmcmu88rC-mcksfO642IU=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzNmYjhmOGMzLWU1YjctNGEyNS04OTJhLWY4YmIwMjNmZmFiMC53ZWJw",
         "type": "Horror",
         "movie_id": "M011",
         "detail": "Horror movie",
@@ -110,7 +110,7 @@ movie_data = {
         },
         {
         "name": "Talk to Me",
-        "pic": "https://resizing.flixster.com/ejS3S8JOBfvZr_fQ_--6SyKKJpQ=/206x305/v2/https://resizing.flixster.com/9WxKriao1BmRamIaqig2k8hd5uM=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2YyZDQwYTM2LWZmYzEtNGUwMC05NzRkLTA3ODM0NThiNDE4Ny5qcGc=",
+        "img": "https://resizing.flixster.com/ejS3S8JOBfvZr_fQ_--6SyKKJpQ=/206x305/v2/https://resizing.flixster.com/9WxKriao1BmRamIaqig2k8hd5uM=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2YyZDQwYTM2LWZmYzEtNGUwMC05NzRkLTA3ODM0NThiNDE4Ny5qcGc=",
         "type": "Horror",
         "movie_id": "M012",
         "detail": "Horror movie",
@@ -119,7 +119,7 @@ movie_data = {
         },
         {
         "name": "When Evil Lurks",
-        "pic": "https://resizing.flixster.com/pYKve2Su8tEGhH0tDOVXySIZUeQ=/206x305/v2/https://resizing.flixster.com/jRxONmZil0CTIu8L0mZJTbLLGrY=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2FiOWRlZjQ2LTY5OTctNGRmZi1hM2IwLWI5ZWQzYmQ4ZmFkYS5qcGc=",
+        "img": "https://resizing.flixster.com/pYKve2Su8tEGhH0tDOVXySIZUeQ=/206x305/v2/https://resizing.flixster.com/jRxONmZil0CTIu8L0mZJTbLLGrY=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2FiOWRlZjQ2LTY5OTctNGRmZi1hM2IwLWI5ZWQzYmQ4ZmFkYS5qcGc=",
         "type": "Horror",
         "movie_id": "M013",
         "detail": "Horror movie",
@@ -128,7 +128,7 @@ movie_data = {
         },
         {
         "name": "The Godfather",
-        "pic": "https://picfiles.alphacoders.com/464/thumb-1920-464751.jpg",
+        "img": "https://picfiles.alphacoders.com/464/thumb-1920-464751.jpg",
         "type": "Crime",
         "movie_id": "M014",
         "detail": "Crime movie",
@@ -137,7 +137,7 @@ movie_data = {
         },
         {
         "name": "Inception",
-        "pic": "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
+        "img": "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
         "type": "Sci-fi",
         "movie_id": "M015",
         "detail": "Sci-fi movie",
@@ -207,6 +207,7 @@ class MinorCineflex:
                 cinema_management=CinemaManagementResponse(
                     theater_list=[TheaterResponse(
                         theater_id=t.theater_id,
+                        theater_name=t.theater_name,
                         theater_type=t.theater_type,
                         seat_amount=t.seat_amount,
                         status=t.status,
@@ -411,6 +412,7 @@ class CinemaManagement:
         return [
             TheaterResponse(
                 theater_id=t.theater_id,
+                theater_name=t.theater_name,
                 theater_type=t.theater_type,
                 seat_amount=t.seat_amount,
                 status=t.status,
@@ -434,6 +436,27 @@ class CinemaManagement:
         
     def add_cinema_showtime(self, showtime: Showtime):
         self.__showtime_list.append(showtime)
+
+    def get_showtime(self):
+        return [
+            ShowtimeResponse(
+                showtime_id=s.showtime_id,
+                start_date=s.start_date,
+                cinema_id=s.cinema_id,
+                theater_id=s.theater_id,
+                movie_id=s.movie_id,
+                dub=s.dub,
+                sub=s.sub
+            ) for s in self.__showtime_list
+        ]
+
+    def get_showtime_by_id(self, showtime_id: str):
+        if(len(self.__showtime_list) > 0):
+            for s in self.__showtime_list:
+                if s.showtime_id == showtime_id:
+                    return s
+        else:
+            return "Failed"
     
     def add_cinema_booking(self, booking: Booking):
         self.__booking_list.append(booking)
@@ -607,8 +630,9 @@ class Movie:
         return self.__role
 
 class Theater:
-    def __init__(self, theater_id: str, theater_type: str, seat_amount: int, status: bool, audio_type: str, video_type: str):
+    def __init__(self, theater_id: str, theater_name: str, theater_type: str, seat_amount: int, status: bool, audio_type: str, video_type: str):
         self.__theater_id = theater_id
+        self.__theater_name = theater_name
         self.__theater_type = theater_type
         self.__seat_amount = seat_amount
         self.__status = status
@@ -619,6 +643,10 @@ class Theater:
     @property
     def theater_id(self):
         return self.__theater_id
+    
+    @property
+    def theater_name(self):
+        return self.__theater_name
     
     @property
     def theater_type(self):
@@ -807,6 +835,7 @@ class MaintainanceResponse(BaseModel):
 
 class TheaterResponse(BaseModel):
     theater_id: str
+    theater_name: str
     theater_type: str
     seat_amount: int
     status: bool
@@ -953,7 +982,7 @@ memory_db.add_cinema(120, "minor_20", "13.675.3356", "ภาคใต้", time(
 for m in movie_data["movie_list"]:
     memory_db.add_all_movie(
         m["name"], 
-        m["pic"],
+        m["img"],
         m["type"],
         m["movie_id"],
         m["detail"],
@@ -964,14 +993,21 @@ memory_db.cinema_list[0].cinema_management.add_cinema_movie("M001")
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M010")
 
 #create_theater
-memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M101", "IMAX", 32, True, "Dolby Atmos", "IMAX"))
-memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M102", "Standard", 32, True, "Dolby", "Standard"))
-memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M201", "VIP", 32, True, "Dolby Atmos", "VIP"))
-memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M202", "Standard", 32, True, "Dolby", "Standard"))
+memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M101", "01", "IMAX", 32, True, "Dolby", "IMAX"))
+memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M102", "02", "Standard", 32, True, "Dolby", "Standard"))
+memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M201", "01", "VIP", 32, True, "Dolby", "VIP"))
+memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M202", "02", "Standard", 32, True, "Dolby", "Standard"))
 
 #create_showtime
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S001", datetime(2025, 3, 3, 12, 30, 00), "101", "T-M101", "M001", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S011", datetime(2025, 3, 3, 15, 30, 00), "101", "T-M101", "M001", True, False))
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S002", datetime(2025, 3, 3, 15, 30, 00), "101", "T-M102", "M010", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S012", datetime(2025, 3, 3, 18, 30, 00), "101", "T-M102", "M010", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S003", datetime(2025, 3, 4, 18, 30, 00), "101", "T-M101", "M002", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S004", datetime(2025, 3, 4, 21, 30, 00), "101", "T-M102", "M003", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S005", datetime(2025, 3, 5, 21, 30, 00), "101", "T-M101", "M004", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S006", datetime(2025, 3, 5, 12, 30, 00), "101", "T-M102", "M005", True, False))
+
 
 #create seat instancer ;-;
 sh = memory_db.get_showtime_from_showtime_id("S001")
@@ -1079,6 +1115,19 @@ def login(login_request: PersonLoginRequest):
 def movie():
     return memory_db.get_movie()
 
+@app.post("/minorcineflex/add_movie")
+def add_movie(movie: MovieResponse):
+    memory_db.add_all_movie(
+        name=movie.name,
+        img=movie.img,
+        movie_type=movie.type,
+        movie_id=movie.movie_id,
+        detail=movie.detail,
+        duration=movie.duration,
+        role=movie.role
+    )
+    return {"message": "Movie added successfully"}
+
 #cinema
 @app.get("/minorcineflex/cinema")
 def cinema():
@@ -1088,6 +1137,19 @@ def cinema():
 @app.get("/minorcineflex/cinema/{cinema_id}/theater")
 def theater_list(cinema_id: int):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater()
+
+@app.post("/minorcineflex/cinema/{cinema_id}/add_theater")
+def add_theater(cinema_id: int, theater: TheaterResponse):
+    memory_db.get_cinema_by_id(cinema_id).cinema_management.add_cinema_theater(Theater(
+        theater_id=theater.theater_id,
+        theater_name=theater.theater_name,
+        theater_type=theater.theater_type,
+        seat_amount=theater.seat_amount,
+        status=theater.status,
+        audio_type=theater.audio_type,
+        video_type=theater.video_type
+    ))
+    return {"message": "Theater added successfully"}
 
 @app.get("/minorcineflex/cinema/{cinema_id}/theater/{theater_id}")
 def theater_by_id(cinema_id: int, theater_id: str):
@@ -1113,6 +1175,27 @@ def reserved_seat(input: SeatReservationRespnd):
         show.move_seat_from_avai_to_res(s)
     return 
         
+#Showtime
+@app.get("/minorcineflex/cinema/{cinema_id}/showtime")
+def showtime_list(cinema_id: int):
+    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime()
+
+@app.post("/minorcineflex/cinema/{cinema_id}/add_showtime")
+def add_showtime(cinema_id: int, showtime: ShowtimeResponse):
+    memory_db.get_cinema_by_id(cinema_id).cinema_management.add_cinema_showtime(Showtime(
+        showtime_id=showtime.showtime_id,
+        start_date=showtime.start_date,
+        cinema_id=showtime.cinema_id,
+        theater_id=showtime.theater_id,
+        movie_id=showtime.movie_id,
+        dub=showtime.dub,
+        sub=showtime.sub
+    ))
+    return {"message": "Showtime added successfully"}
+
+@app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
+def showtime_by_id(cinema_id: int, showtime_id: str):
+    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime_by_id(showtime_id)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
