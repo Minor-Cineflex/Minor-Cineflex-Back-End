@@ -993,43 +993,48 @@ memory_db.cinema_list[0].cinema_management.add_cinema_movie("M001")
 memory_db.cinema_list[0].cinema_management.add_cinema_movie("M010")
 
 #create_theater
-memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M101", "01", "IMAX", 32, True, "Dolby", "IMAX"))
-memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-M102", "02", "Standard", 32, True, "Dolby", "Standard"))
-memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M201", "01", "VIP", 32, True, "Dolby", "VIP"))
-memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-M202", "02", "Standard", 32, True, "Dolby", "Standard"))
+memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-101-01", "01", "IMAX", 32, True, "Dolby", "IMAX"))
+memory_db.cinema_list[0].cinema_management.add_cinema_theater(Theater("T-101-02", "02", "Standard", 32, True, "Dolby", "Standard"))
+memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-102-01", "01", "VIP", 32, True, "Dolby", "VIP"))
+memory_db.cinema_list[1].cinema_management.add_cinema_theater(Theater("T-102-02", "02", "Standard", 32, True, "Dolby", "Standard"))
 
 #create_showtime
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S001", datetime(2025, 3, 3, 12, 30, 00), "101", "T-M101", "M001", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S011", datetime(2025, 3, 3, 15, 30, 00), "101", "T-M101", "M001", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S002", datetime(2025, 3, 3, 15, 30, 00), "101", "T-M102", "M010", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S012", datetime(2025, 3, 3, 18, 30, 00), "101", "T-M102", "M010", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S003", datetime(2025, 3, 4, 18, 30, 00), "101", "T-M101", "M002", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S004", datetime(2025, 3, 4, 21, 30, 00), "101", "T-M102", "M003", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S005", datetime(2025, 3, 5, 21, 30, 00), "101", "T-M101", "M004", True, False))
-memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S006", datetime(2025, 3, 5, 12, 30, 00), "101", "T-M102", "M005", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S-101-01-001", datetime(2025, 3, 3, 12, 30, 00), "101", "T-101-01", "M001", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S-101-01-011", datetime(2025, 3, 3, 15, 30, 00), "101", "T-101-01", "M001", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S-101-02-002", datetime(2025, 3, 3, 15, 30, 00), "101", "T-101-02", "M010", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S-101-02-012", datetime(2025, 3, 3, 18, 30, 00), "101", "T-101-02", "M010", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S-101-01-003", datetime(2025, 3, 4, 18, 30, 00), "101", "T-101-01", "M002", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S-101-02-004", datetime(2025, 3, 4, 21, 30, 00), "101", "T-101-02", "M003", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S-101-01-005", datetime(2025, 3, 5, 21, 30, 00), "101", "T-101-01", "M004", True, False))
+memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S-101-02-006", datetime(2025, 3, 5, 12, 30, 00), "101", "T-101-02", "M005", True, False))
 
 #name_protocol
 #theater_id = T-{cinema_id}-{theater_name} ex. T-101-01 T-101-02
 #showtime_id = S-{cinema_id}-{theater_name}-{showtime_number} ex. S-101-01-001 S-101-01-002
 #seat_id = ST-{cinema_id}-{theater_name}-{showtime_number}-{seat_number} ex. ST-101-01-001-001 ST-101-01-001-002 
 
-#create seat instancer ;-;
-sh = memory_db.get_showtime_from_showtime_id("S001")
-for row in range(1,5):
-    for col in range(1,9):
-        sh.append_avaliable_seat(Seat(
-            seat_id = f"Seat{str(8*(row-1) + col).zfill(5)}",
-            seat_type = "Delux",
-            size = 1,
-            price = 100,
-            seat_pos = f"{chr(64 + row)}{col}"
-        ))
-sh.move_seat_from_avai_to_res("Seat00001")
-sh.move_seat_from_avai_to_res("Seat00002")
-sh.move_seat_from_avai_to_res("Seat00003")
-sh.move_seat_from_avai_to_res("Seat00004")
-sh.move_seat_from_avai_to_res("Seat00018")
-sh.move_seat_from_avai_to_res("Seat00019")
+#create seat instance ;-;
+for show in memory_db.cinema_list[0].cinema_management.showtime_list:
+    s_id = show.showtime_id
+    s_id = s_id[1:]
+    for row in range(1,5):
+        for col in range(1,9):
+            show.append_avaliable_seat(Seat(
+                seat_id = f"ST{s_id}-{str(8*(row-1) + col).zfill(3)}",
+                seat_type = "Delux",
+                size = 1,
+                price = 100,
+                seat_pos = f"{chr(64 + row)}{col}"
+            ))
+
+#temp
+sh = memory_db.get_showtime_from_showtime_id("S-101-01-001")            
+sh.move_seat_from_avai_to_res("ST-101-01-001-001")
+sh.move_seat_from_avai_to_res("ST-101-01-001-002")
+sh.move_seat_from_avai_to_res("ST-101-01-001-003")
+sh.move_seat_from_avai_to_res("ST-101-01-001-004")
+sh.move_seat_from_avai_to_res("ST-101-01-001-018")
+sh.move_seat_from_avai_to_res("ST-101-01-001-019")
 
 #system
 @app.get("/minorcineflex")
