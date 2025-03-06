@@ -890,6 +890,13 @@ def add_movie(movie: MovieResponse):
     )
     return {"message": "Movie added successfully"}
 
+@app.get("/minorcineflex/movie/{movie_id}")
+def movie_by_id(movie_id: str):
+    for m in memory_db.movie_list:
+        if m.movie_id == movie_id:
+            return {"movie_list" : [m]}
+    return "Movie not found"
+
 #cinema
 @app.get("/minorcineflex/cinema")
 def cinema():
