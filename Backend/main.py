@@ -1008,6 +1008,10 @@ memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S004", 
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S005", datetime(2025, 3, 5, 21, 30, 00), "101", "T-M101", "M004", True, False))
 memory_db.cinema_list[0].cinema_management.add_cinema_showtime(Showtime("S006", datetime(2025, 3, 5, 12, 30, 00), "101", "T-M102", "M005", True, False))
 
+#name_protocol
+#theater_id = T-{cinema_id}-{theater_name} ex. T-101-01 T-101-02
+#showtime_id = S-{cinema_id}-{theater_name}-{showtime_number} ex. S-101-01-001 S-101-01-002
+#seat_id = ST-{cinema_id}-{theater_name}-{showtime_number}-{seat_number} ex. ST-101-01-001-001 ST-101-01-001-002 
 
 #create seat instancer ;-;
 sh = memory_db.get_showtime_from_showtime_id("S001")
