@@ -325,22 +325,25 @@ class MinorCineflex:
         sh = self.get_showtime_from_showtime_id(showtime_id)
         if sh :
             return {
-                "Seat" : [SeatResponse(seat_id= seat.seat_id,
+                "Seat" :[SeatResponse(seat_id= seat.seat_id,
                                        seat_type=seat.seat_type,
                                        size=seat.size,
                                        price=seat.price,
                                        status=True,
                                        row = seat.seat_pos[0],
                                        col = int(seat.seat_pos[1:])
-                                       ) for seat in sh.available_seat] + 
-                          [SeatResponse(seat_id= seat.seat_id,
+                                       ) for seat in sh.available_seat
+                        ] 
+                        + 
+                        [SeatResponse(seat_id= seat.seat_id,
                                        seat_type=seat.seat_type,
                                        size=seat.size,
                                        price=seat.price,
                                        status=False,
                                        row = seat.seat_pos[0],
                                        col = int(seat.seat_pos[1:])
-                                       ) for seat in sh.reserved_seat]
+                                       ) for seat in sh.reserved_seat
+                        ]
             }
 
     def get_account_from_userId(self,user_id):
