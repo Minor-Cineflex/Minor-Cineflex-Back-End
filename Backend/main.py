@@ -470,6 +470,13 @@ class CinemaManagement:
         else:
             return "Failed"
         
+    def delete_theater_by_theater_id(self, theater_id: str):
+        for t in self.theater_list:
+            if t.theater_id == theater_id:
+                self.theater_list.remove(t)
+                return True
+        return False
+        
     def add_cinema_showtime(self, showtime: Showtime):
         self.__showtime_list.append(showtime)
 
@@ -1234,6 +1241,12 @@ def add_theater(cinema_id: int, theater: TheaterResponse):
 @app.get("/minorcineflex/cinema/{cinema_id}/theater/{theater_id}")
 def theater_by_id(cinema_id: int, theater_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater_by_id(theater_id)
+
+@app.delete("/minorcineflex/cinema/{cinema_id}/delete_theater/{theater_id}")
+def delete_theater(cinema_id: int, theater_id: str):
+    if memory_db.get_cinema_by_id(cinema_id).cinema_management.delete_theater_by_theater_id(theater_id):
+        return {"message": "Theater deleted successfully"}
+    return {"error": "Theater not found"}
 
 #getseat
 @app.get("/minorcineflex/seat/{showtime_id}")
