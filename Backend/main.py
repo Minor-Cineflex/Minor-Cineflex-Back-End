@@ -368,6 +368,13 @@ class MinorCineflex:
             if p.account.account_id == user_id:
                 return p.account
         return None
+
+    def delete_person_by_account_id(self, account_id: str):
+        for p in self.person_list:
+            if p.account.account_id == account_id:
+                self.person_list.remove(p)
+                return True
+        return False
     
 
     #getter
@@ -1123,6 +1130,16 @@ def update_person(person: PersonRequest):
         return {"message": "Person and account updated successfully"}
     return {"error": "Person not found"}
 
+@app.delete("/minorcineflex/delete_person/{account_id}")
+def delete_person(account_id: str):
+    person = memory_db.search_person_account_id(account_id)
+    if person:
+        if memory_db.delete_person_by_account_id(account_id):
+            return {"message": "Person deleted successfully"}
+        else:
+            return {"error": "Person not found"}
+    return {"error": "Person not found"}
+
 #Login 
 @app.post("/minorcineflex/login")
 def login(login_request: PersonLoginRequest):
@@ -1157,6 +1174,19 @@ def add_movie(movie: MovieResponse):
 @app.get("/minorcineflex/cinema")
 def cinema():
     return memory_db.get_cinema()
+
+@app.post("/minorcineflex/add_cinema")
+def add_cinema(cinema: CinemaResponse):
+    memory_db.add_cinema(
+        id=cinema.cinema_id,
+        name=cinema.name,
+        location=cinema.location,
+        region=cinema.region,
+        opentime=cinema.opentime,
+        closetime=cinema.closetime,
+        cinema_management=cinema.cinema_management
+    )
+    return {"message": "Cinema added successfully"}
 
 #theater
 @app.get("/minorcineflex/cinema/{cinema_id}/theater")
