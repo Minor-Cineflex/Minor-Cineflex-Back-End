@@ -515,6 +515,20 @@ class CinemaManagement:
                 self.theater_list.remove(t)
                 return True
         return False
+
+    def update_theater_by_theater_id(self, theater_id, theater_name, theater_type, seat_amount, status, audio_type, video_type, maintainance_list):
+        for t in self.theater_list:
+            if t.theater_id == theater_id:
+                t.theater_id = theater_id
+                t.theater_name = theater_name
+                t.theater_type = theater_type
+                t.seat_amount = seat_amount
+                t.status = status
+                t.audio_type = audio_type
+                t.video_type = video_type
+                t.maintainance_list = maintainance_list
+                return True
+        return False
         
     def add_cinema_showtime(self, showtime: Showtime):
         self.__showtime_list.append(showtime)
@@ -725,34 +739,58 @@ class Theater:
     @property
     def theater_id(self):
         return self.__theater_id
+    @theater_id.setter
+    def theater_id(self, theater_id):
+        self.__theater_id = theater_id
     
     @property
     def theater_name(self):
         return self.__theater_name
+    @theater_name.setter
+    def theater_name(self, theater_name):
+        self.__theater_name = theater_name
     
     @property
     def theater_type(self):
         return self.__theater_type
+    @theater_type.setter
+    def theater_type(self, theater_type):
+        self.__theater_type = theater_type
     
     @property
     def seat_amount(self): 
         return self.__seat_amount
+    @seat_amount.setter
+    def seat_amount(self, seat_amount):
+        self.__seat_amount = seat_amount
     
     @property
     def status(self):
         return self.__status
+    @status.setter
+    def status(self, status):
+        self.__status = status
     
     @property
     def audio_type(self):
         return self.__audio_type
+    @audio_type.setter
+    def audio_type(self, audio_type):
+        self.__audio_type = audio_type
     
     @property
     def video_type(self):
         return self.__video_type
+    @video_type.setter
+    def video_type(self, video_type):
+        self.__video_type = video_type
     
     @property
     def maintainance_list(self):
         return self.__maintainance_list
+    @maintainance_list.setter
+    def maintainance_list(self, maintainance_list):
+        self.__maintainance_list = maintainance_list
 
 class Showtime:
     def __init__(self,showtime_id: str, start_date: datetime, cinema_id: str, theater_id: str, movie_id: str, dub: bool, sub: bool):
@@ -1295,6 +1333,21 @@ def add_theater(cinema_id: int, theater: TheaterResponse):
 @app.get("/minorcineflex/cinema/{cinema_id}/theater/{theater_id}")
 def theater_by_id(cinema_id: int, theater_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater_by_id(theater_id)
+
+@app.put("/minorcineflex/cinema/{cinema_id}/update_theater/{theater_id}")
+def update_theater(cinema_id: int, theater_id: str, updated_theater: TheaterResponse):
+    if memory_db.get_cinema_by_id(cinema_id).cinema_management.update_theater_by_theater_id(
+        theater_id=theater_id,
+        theater_name=updated_theater.theater_name,
+        theater_type=updated_theater.theater_type,
+        seat_amount=updated_theater.seat_amount,
+        status=updated_theater.status,
+        audio_type=updated_theater.audio_type,
+        video_type=updated_theater.video_type,
+        maintainance_list=updated_theater.maintainance_list
+    ):
+        return {"message": "Theater updated successfully"}
+    return {"error": "Theater not found"}
 
 @app.delete("/minorcineflex/cinema/{cinema_id}/delete_theater/{theater_id}")
 def delete_theater(cinema_id: int, theater_id: str):
