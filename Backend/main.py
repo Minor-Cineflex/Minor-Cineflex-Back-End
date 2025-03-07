@@ -369,6 +369,13 @@ class MinorCineflex:
                 return p.account
         return None
     
+    def put_seat(self,seat_list,user_id,showtime_id):
+        acc = memory_db.get_account_from_userId(user_id)
+        show = memory_db.get_showtime_from_showtime_id(showtime_id)
+        for s in seat_list:
+            acc.append_to_reserve_seat(s)
+            show.move_seat_from_avai_to_res(s)
+    
 
     #getter
     @property
@@ -1193,11 +1200,8 @@ def reserved_seat(input: SeatReservationRespnd):
     user_id = input.user_id
     showtime_id  = input.showtime_id
 
-    acc = memory_db.get_account_from_userId(user_id)
-    show = memory_db.get_showtime_from_showtime_id(showtime_id)
-    for s in seat_list:
-        acc.append_to_reserve_seat(s)
-        show.move_seat_from_avai_to_res(s)
+    put_seat(seat_list,user_id,showtime_id)
+
     return 
         
 #Showtime
