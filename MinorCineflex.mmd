@@ -90,6 +90,7 @@ Theater o-- Maintainance
 Theater o-- SeatMap
 class Theater {
         -theater_id: str
+        -theater_name: str
         -theater_type: str
         -seat_amount: int
         -status: bool
@@ -104,9 +105,9 @@ Showtime --> Movie
 class Showtime {
         -showtime_id: str
         -start_date: datetime
-        -cinema: Cinema
-        -theater: Theater
-        -movie: Movie
+        -cinema_id: str
+        -theater_id: str
+        -movie_id: str
         -dub: bool
         -sub: bool
         -available_seat: List[Seat]
