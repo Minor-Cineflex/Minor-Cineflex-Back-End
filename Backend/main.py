@@ -389,6 +389,18 @@ class MinorCineflex:
                 self.cinema_list.remove(c)
                 return True
         return False
+    
+    def update_cinema_by_cinema_id(self, cinema_id, name, location, region, opentime, closetime, cinema_management):
+        for c in self.cinema_list:
+            if c.cinema_id == cinema_id:
+                c.name = name
+                c.location = location
+                c.region = region
+                c.opentime = opentime
+                c.closetime = closetime
+                c.cinema_management = cinema_management
+                return True
+        return False
 
     #getter
     @property
@@ -415,24 +427,51 @@ class Cinema:
     @property
     def cinema_id(self):
         return self.__cinema_id
+    @cinema_id.setter
+    def cinema_id(self, cinema_id):
+        self.__cinema_id = cinema_id
+
     @property
     def name(self):
         return self.__name
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
     @property
     def location(self):
         return self.__location
+    @location.setter
+    def location(self, location):
+        self.__location = location
+
     @property
     def region(self):
         return self.__region
+    @region.setter
+    def region(self, region):
+        self.__region = region
+
     @property
     def opentime(self):
         return self.__opentime
+    @opentime.setter
+    def opentime(self, opentime):
+        self.__opentime = opentime
+
     @property
     def closetime(self):
         return self.__closetime
+    @closetime.setter
+    def closetime(self, closetime):
+        self.__closetime = closetime
+
     @property
     def cinema_management(self):
         return self.__cinema_management
+    @cinema_management.setter
+    def cinema_management(self, cinema_management):
+        self.__cinema_management = cinema_management
 
 class CinemaManagement:
     def __init__(self):
@@ -1218,6 +1257,21 @@ def add_cinema(cinema: CinemaResponse):
 def delete_cinema(cinema_id: int):
     if memory_db.delete_cinema_by_cinema_id(cinema_id):
         return {"message": "Cinema deleted successfully"}
+    return {"error": "Cinema not found"}
+
+@app.put("/minorcineflex/update_cinema/{cinema_id}")
+def update_cinema(cinema_id: int, updated_cinema: CinemaResponse):
+    success = memory_db.update_cinema_by_cinema_id(
+        cinema_id=cinema_id,
+        name=updated_cinema.name,
+        location=updated_cinema.location,
+        region=updated_cinema.region,
+        opentime=updated_cinema.opentime,
+        closetime=updated_cinema.closetime,
+        cinema_management=updated_cinema.cinema_management
+    )
+    if success:
+        return {"message": "Cinema updated successfully"}
     return {"error": "Cinema not found"}
 
 #theater
