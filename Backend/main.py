@@ -383,6 +383,13 @@ class MinorCineflex:
                 return True
         return False
 
+    def delete_cinema_by_cinema_id(self, cinema_id: int):
+        for c in self.cinema_list:
+            if c.cinema_id == cinema_id:
+                self.cinema_list.remove(c)
+                return True
+        return False
+
     #getter
     @property
     def cinema_list(self):
@@ -1199,6 +1206,12 @@ def add_cinema(cinema: CinemaResponse):
         cinema_management=cinema.cinema_management
     )
     return {"message": "Cinema added successfully"}
+
+@app.delete("/minorcineflex/delete_cinema/{cinema_id}")
+def delete_cinema(cinema_id: int):
+    if memory_db.delete_cinema_by_cinema_id(cinema_id):
+        return {"message": "Cinema deleted successfully"}
+    return {"error": "Cinema not found"}
 
 #theater
 @app.get("/minorcineflex/cinema/{cinema_id}/theater")
