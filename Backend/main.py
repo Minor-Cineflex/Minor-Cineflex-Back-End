@@ -43,7 +43,7 @@ movie_data = {
         "movie_id": "M004",
         "detail": "Comedy movie",
         "duration": 133,
-        "role": "comming soon"
+        "role": "coming soon"
         },
         {
         "name": "Let the Right One In",
@@ -70,7 +70,7 @@ movie_data = {
         "movie_id": "M007",
         "detail": "Drama movie",
         "duration": 125,
-        "role": "comming soon"
+        "role": "coming soon"
         },
         {
         "name": "The First Omen",
@@ -97,7 +97,7 @@ movie_data = {
         "movie_id": "M010",
         "detail": "Action movie",
         "duration": 125,
-        "role": "comming soon"
+        "role": "coming soon"
         },
         {
         "name": "A Quiet Place",
