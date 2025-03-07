@@ -376,6 +376,12 @@ class MinorCineflex:
                 return True
         return False
     
+    def delete_movie_by_movie_id(self, movie_id: str):
+        for m in self.movie_list:
+            if m.movie_id == movie_id:
+                self.movie_list.remove(m)
+                return True
+        return False
 
     #getter
     @property
@@ -1169,6 +1175,12 @@ def add_movie(movie: MovieResponse):
         role=movie.role
     )
     return {"message": "Movie added successfully"}
+
+@app.delete("/minorcineflex/delete_movie/{movie_id}")
+def delete_movie(movie_id: str):
+    if memory_db.delete_movie_by_movie_id(movie_id):
+        return {"message": "Movie deleted successfully"}
+    return {"error": "Movie not found"}
 
 #cinema
 @app.get("/minorcineflex/cinema")
