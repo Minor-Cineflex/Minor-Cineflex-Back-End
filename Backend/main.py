@@ -401,6 +401,18 @@ class MinorCineflex:
                 c.cinema_management = cinema_management
                 return True
         return False
+    
+    def update_movie_by_movie_id(self, movie_id, name, img, movie_type, detail, duration, role):
+        for m in self.movie_list:
+            if m.movie_id == movie_id:
+                m.name = name
+                m.img = img
+                m.type = movie_type
+                m.detail = detail
+                m.duration = duration
+                m.role = role
+                return True
+        return False
 
     #getter
     @property
@@ -706,24 +718,51 @@ class Movie:
     @property
     def name(self):
         return self.__name
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
     @property
     def img(self):
         return self.__img
+    @img.setter
+    def img(self, img):
+        self.__img = img
+
     @property
     def type(self):
         return self.__type
+    @type.setter
+    def type(self, movie_type):
+        self.__type = movie_type
+
     @property
     def movie_id(self):
         return self.__movie_id
+    @movie_id.setter
+    def movie_id(self, movie_id):
+        self.__movie_id = movie_id
+
     @property
     def detail(self):
         return self.__detail
+    @detail.setter
+    def detail(self, detail):
+        self.__detail = detail
+
     @property
     def duration(self):
         return self.__duration
+    @duration.setter
+    def duration(self, duration):
+        self.__duration = duration
+
     @property
     def role(self):
         return self.__role
+    @role.setter
+    def role(self, role):
+        self.__role = role
 
 class Theater:
     def __init__(self, theater_id: str, theater_name: str, theater_type: str, seat_amount: int, status: bool, audio_type: str, video_type: str):
@@ -1266,6 +1305,21 @@ def add_movie(movie: MovieResponse):
         role=movie.role
     )
     return {"message": "Movie added successfully"}
+
+@app.put("/minorcineflex/update_movie/{movie_id}")
+def update_movie(movie_id: str, updated_movie: MovieResponse):
+    success = memory_db.update_movie_by_movie_id(
+        movie_id=movie_id,
+        name=updated_movie.name,
+        img=updated_movie.img,
+        movie_type=updated_movie.type,
+        detail=updated_movie.detail,
+        duration=updated_movie.duration,
+        role=updated_movie.role
+    )
+    if success:
+        return {"message": "Movie updated successfully"}
+    return {"error": "Movie not found"}
 
 @app.delete("/minorcineflex/delete_movie/{movie_id}")
 def delete_movie(movie_id: str):
