@@ -375,6 +375,7 @@ class MinorCineflex:
         for s in seat_list:
             acc.append_to_reserve_seat(s)
             show.move_seat_from_avai_to_res(s)
+        return "success"
     
 
     #getter
