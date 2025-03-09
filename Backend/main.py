@@ -239,12 +239,10 @@ class MinorCineflex:
         }
     
     def get_cinema_by_id(self, cinema_id: int):
-        if(len(self.__cinema_list) > 0):
-            for c in self.__cinema_list:
-                if c.cinema_id == cinema_id:
-                    return c
-        else:
-            return "Failed"
+        for c in self.__cinema_list:
+            if str(c.cinema_id) == str(cinema_id):  # Ensure comparison works for both int and str
+                return c
+        return None  # Return None explicitly if not found
 
     def get_movie(self):
         return {
@@ -897,17 +895,32 @@ class Showtime:
     def append_reserved_seat(self,seat:Seat):
         self.__reserved_seat.append(seat)
 
-    def move_seat_from_avai_to_res(self,seat_id):
-        for seat in self.__available_seat[:]:  #copy of list
+    def move_seat_from_avai_to_res(self, seat_id):
+        for seat in self.available_seat[:]:  # Use a copy of the list to avoid modification issues
             if seat.seat_id == seat_id:
-                self.append_reserved_seat(seat)
-                self.__available_seat.remove(seat)
+                self.available_seat.remove(seat)
+                self.reserved_seat.append(seat)
+                print(f"[DEBUG] Seat {seat_id} moved from available to reserved")  # Debugging
                 return
-    
-    def get_seat_from_id(self,seat_id):
-        for s in self.available_seat:
-            if s.seat_id == seat_id:
-                return s
+        print(f"[ERROR] Seat {seat_id} was not found in available seats, cannot reserve")  # Debugging  
+        
+        
+    def get_seat_from_id(self, seat_id):
+        print(f"Searching for Seat ID: {seat_id} in Showtime {self.showtime_id}")
+
+        # Check in available seats
+        for seat in self.available_seat:
+            print(f"Checking (Available) Seat ID: {seat.seat_id}")
+            if seat.seat_id == seat_id:
+                return seat
+
+        # Check in reserved seats
+        for seat in self.reserved_seat:
+            print(f"Checking (Reserved) Seat ID: {seat.seat_id}")
+            if seat.seat_id == seat_id:
+                return seat
+
+        print(f"[ERROR] Seat ID: {seat_id} NOT FOUND in Showtime {self.showtime_id}")  # Debugging
         return None
 
 class Payment:
@@ -1450,6 +1463,129 @@ def add_showtime(cinema_id: int, showtime: ShowtimeResponse):
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
 def showtime_by_id(cinema_id: int, showtime_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime_by_id(showtime_id)
+
+# -------------------------------------------------------------------------------------- payment page --------------------------------------------------------------------------------------
+# Initiate payment - returns the amount to be paid
+@app.post("/minorcineflex/base_payment")
+def base_payment(user_id: str, movie_id: str, showtime_id: str, payment_type: str):
+    # Retrieve user account
+    account = memory_db.get_account_from_userId(user_id)
+    if not account:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Retrieve showtime
+    showtime = memory_db.get_showtime_from_showtime_id(showtime_id)
+    if not showtime:
+        raise HTTPException(status_code=404, detail="Showtime not found")
+
+    # Retrieve movie
+    movie = next((m for m in memory_db.movie_list if m.movie_id == movie_id), None)
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+
+    # Fetch reserved seats
+    reserved_seat_ids = account.reserved_list
+    if not reserved_seat_ids:
+        raise HTTPException(status_code=400, detail="No seats reserved for this user")
+    print(f"Reserved Seat IDs: {reserved_seat_ids}")
+    
+    reserved_seat_ids = account.reserved_list
+    print(f"[DEBUG] Reserved seats for user {user_id}: {reserved_seat_ids}")
+    # Calculate total price
+    total_price = 0
+    for seat_id in reserved_seat_ids:
+        seat_obj = memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id)
+        if seat_obj:
+            print(f"Seat ID: {seat_id}, Price: {seat_obj.price}")  # Debugging
+            total_price += seat_obj.price
+        else:
+            print(f"Seat ID: {seat_id} NOT FOUND")  # Debugging
+
+    return {
+        "message": "Proceed to payment",
+        "user_id": user_id,
+        "movie_id": movie_id,
+        "showtime_id": showtime_id,
+        "total_price": total_price,
+        "payment_method": payment_type,
+        "reserved_seats": reserved_seat_ids
+    }
+
+
+# Finalize payment - Creates booking if payment is successful
+@app.post("/minorcineflex/done_payment")
+def done_payment(user_id: str, movie_id: str, showtime_id: str, payment_type: str):
+    # Retrieve user account
+    account = memory_db.get_account_from_userId(user_id)
+    if not account:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Retrieve showtime
+    showtime = memory_db.get_showtime_from_showtime_id(showtime_id)
+    if not showtime:
+        raise HTTPException(status_code=404, detail="Showtime not found")
+
+    # Retrieve movie
+    movie = next((m for m in memory_db.movie_list if m.movie_id == movie_id), None)
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+
+    # Fetch reserved seats
+    reserved_seat_ids = account.reserved_list
+    if not reserved_seat_ids:
+        raise HTTPException(status_code=400, detail="No seats reserved for this user")
+
+    # Check if cinema exists
+    cinema = memory_db.get_cinema_by_id(showtime.cinema_id)
+    if not cinema:
+        raise HTTPException(status_code=404, detail="Cinema not found")
+
+    # Ensure seats are not already booked
+    if reserved_seat_ids in cinema.cinema_management.booking_list:
+        raise HTTPException(status_code=400, detail="Seats have already been booked")
+
+    # Calculate total price
+    total_price = sum(
+        memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id).price
+        for seat_id in reserved_seat_ids
+        if memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id) is not None
+    )
+
+    # Create a payment instance
+    payment = Payment(payment_type=payment_type)
+
+    # Retrieve actual Seat objects
+    seat_objects = [
+        memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id)
+        for seat_id in reserved_seat_ids
+        if memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id) is not None
+    ]
+
+    # Create a booking instance
+    booking = Booking(
+        showtime=showtime,
+        account_id=user_id,
+        seat_list=seat_objects,
+        booking_date=datetime.now(),
+        payment_method=payment,
+        total=total_price
+    )
+
+    # Add booking to user history
+    account.history.append(booking)
+
+    # Add booking to cinema management's booking list
+    cinema.cinema_management.booking_list.append(booking)
+
+    return {
+        "message": "Payment completed and booking created successfully",
+        "user_id": user_id,
+        "movie_id": movie_id,
+        "showtime_id": showtime_id,
+        "total_price": total_price,
+        "payment_method": payment_type,
+        "reserved_seats": reserved_seat_ids
+    }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
