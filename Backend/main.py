@@ -43,7 +43,7 @@ movie_data = {
         "movie_id": "M004",
         "detail": "Comedy movie",
         "duration": 133,
-        "role": "comming soon"
+        "role": "coming soon"
         },
         {
         "name": "Let the Right One In",
@@ -70,7 +70,7 @@ movie_data = {
         "movie_id": "M007",
         "detail": "Drama movie",
         "duration": 125,
-        "role": "comming soon"
+        "role": "coming soon"
         },
         {
         "name": "The First Omen",
@@ -97,7 +97,7 @@ movie_data = {
         "movie_id": "M010",
         "detail": "Action movie",
         "duration": 125,
-        "role": "comming soon"
+        "role": "coming soon"
         },
         {
         "name": "A Quiet Place",
@@ -239,12 +239,10 @@ class MinorCineflex:
         }
     
     def get_cinema_by_id(self, cinema_id: int):
-        if(len(self.__cinema_list) > 0):
-            for c in self.__cinema_list:
-                if c.cinema_id == cinema_id:
-                    return c
-        else:
-            return "Failed"
+        for c in self.__cinema_list:
+            if str(c.cinema_id) == str(cinema_id):  # Ensure comparison works for both int and str
+                return c
+        return None  # Return None explicitly if not found
 
     def get_movie(self):
         return {
@@ -368,7 +366,51 @@ class MinorCineflex:
             if p.account.account_id == user_id:
                 return p.account
         return None
+
+    def delete_person_by_account_id(self, account_id: str):
+        for p in self.person_list:
+            if p.account.account_id == account_id:
+                self.person_list.remove(p)
+                return True
+        return False
     
+    def delete_movie_by_movie_id(self, movie_id: str):
+        for m in self.movie_list:
+            if m.movie_id == movie_id:
+                self.movie_list.remove(m)
+                return True
+        return False
+
+    def delete_cinema_by_cinema_id(self, cinema_id: int):
+        for c in self.cinema_list:
+            if c.cinema_id == cinema_id:
+                self.cinema_list.remove(c)
+                return True
+        return False
+    
+    def update_cinema_by_cinema_id(self, cinema_id, name, location, region, opentime, closetime, cinema_management):
+        for c in self.cinema_list:
+            if c.cinema_id == cinema_id:
+                c.name = name
+                c.location = location
+                c.region = region
+                c.opentime = opentime
+                c.closetime = closetime
+                c.cinema_management = cinema_management
+                return True
+        return False
+    
+    def update_movie_by_movie_id(self, movie_id, name, img, movie_type, detail, duration, role):
+        for m in self.movie_list:
+            if m.movie_id == movie_id:
+                m.name = name
+                m.img = img
+                m.type = movie_type
+                m.detail = detail
+                m.duration = duration
+                m.role = role
+                return True
+        return False
     def put_seat(self,seat_list,user_id,showtime_id):
         acc = memory_db.get_account_from_userId(user_id)
         show = memory_db.get_showtime_from_showtime_id(showtime_id)
@@ -403,24 +445,51 @@ class Cinema:
     @property
     def cinema_id(self):
         return self.__cinema_id
+    @cinema_id.setter
+    def cinema_id(self, cinema_id):
+        self.__cinema_id = cinema_id
+
     @property
     def name(self):
         return self.__name
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
     @property
     def location(self):
         return self.__location
+    @location.setter
+    def location(self, location):
+        self.__location = location
+
     @property
     def region(self):
         return self.__region
+    @region.setter
+    def region(self, region):
+        self.__region = region
+
     @property
     def opentime(self):
         return self.__opentime
+    @opentime.setter
+    def opentime(self, opentime):
+        self.__opentime = opentime
+
     @property
     def closetime(self):
         return self.__closetime
+    @closetime.setter
+    def closetime(self, closetime):
+        self.__closetime = closetime
+
     @property
     def cinema_management(self):
         return self.__cinema_management
+    @cinema_management.setter
+    def cinema_management(self, cinema_management):
+        self.__cinema_management = cinema_management
 
 class CinemaManagement:
     def __init__(self):
@@ -457,6 +526,27 @@ class CinemaManagement:
                     return t
         else:
             return "Failed"
+        
+    def delete_theater_by_theater_id(self, theater_id: str):
+        for t in self.theater_list:
+            if t.theater_id == theater_id:
+                self.theater_list.remove(t)
+                return True
+        return False
+
+    def update_theater_by_theater_id(self, theater_id, theater_name, theater_type, seat_amount, status, audio_type, video_type, maintainance_list):
+        for t in self.theater_list:
+            if t.theater_id == theater_id:
+                t.theater_id = theater_id
+                t.theater_name = theater_name
+                t.theater_type = theater_type
+                t.seat_amount = seat_amount
+                t.status = status
+                t.audio_type = audio_type
+                t.video_type = video_type
+                t.maintainance_list = maintainance_list
+                return True
+        return False
         
     def add_cinema_showtime(self, showtime: Showtime):
         self.__showtime_list.append(showtime)
@@ -634,24 +724,51 @@ class Movie:
     @property
     def name(self):
         return self.__name
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
     @property
     def img(self):
         return self.__img
+    @img.setter
+    def img(self, img):
+        self.__img = img
+
     @property
     def type(self):
         return self.__type
+    @type.setter
+    def type(self, movie_type):
+        self.__type = movie_type
+
     @property
     def movie_id(self):
         return self.__movie_id
+    @movie_id.setter
+    def movie_id(self, movie_id):
+        self.__movie_id = movie_id
+
     @property
     def detail(self):
         return self.__detail
+    @detail.setter
+    def detail(self, detail):
+        self.__detail = detail
+
     @property
     def duration(self):
         return self.__duration
+    @duration.setter
+    def duration(self, duration):
+        self.__duration = duration
+
     @property
     def role(self):
         return self.__role
+    @role.setter
+    def role(self, role):
+        self.__role = role
 
 class Theater:
     def __init__(self, theater_id: str, theater_name: str, theater_type: str, seat_amount: int, status: bool, audio_type: str, video_type: str):
@@ -667,34 +784,58 @@ class Theater:
     @property
     def theater_id(self):
         return self.__theater_id
+    @theater_id.setter
+    def theater_id(self, theater_id):
+        self.__theater_id = theater_id
     
     @property
     def theater_name(self):
         return self.__theater_name
+    @theater_name.setter
+    def theater_name(self, theater_name):
+        self.__theater_name = theater_name
     
     @property
     def theater_type(self):
         return self.__theater_type
+    @theater_type.setter
+    def theater_type(self, theater_type):
+        self.__theater_type = theater_type
     
     @property
     def seat_amount(self): 
         return self.__seat_amount
+    @seat_amount.setter
+    def seat_amount(self, seat_amount):
+        self.__seat_amount = seat_amount
     
     @property
     def status(self):
         return self.__status
+    @status.setter
+    def status(self, status):
+        self.__status = status
     
     @property
     def audio_type(self):
         return self.__audio_type
+    @audio_type.setter
+    def audio_type(self, audio_type):
+        self.__audio_type = audio_type
     
     @property
     def video_type(self):
         return self.__video_type
+    @video_type.setter
+    def video_type(self, video_type):
+        self.__video_type = video_type
     
     @property
     def maintainance_list(self):
         return self.__maintainance_list
+    @maintainance_list.setter
+    def maintainance_list(self, maintainance_list):
+        self.__maintainance_list = maintainance_list
 
 class Showtime:
     def __init__(self,showtime_id: str, start_date: datetime, cinema_id: str, theater_id: str, movie_id: str, dub: bool, sub: bool):
@@ -762,17 +903,32 @@ class Showtime:
     def append_reserved_seat(self,seat:Seat):
         self.__reserved_seat.append(seat)
 
-    def move_seat_from_avai_to_res(self,seat_id):
-        for seat in self.__available_seat[:]:  #copy of list
+    def move_seat_from_avai_to_res(self, seat_id):
+        for seat in self.available_seat[:]:  # Use a copy of the list to avoid modification issues
             if seat.seat_id == seat_id:
-                self.append_reserved_seat(seat)
-                self.__available_seat.remove(seat)
+                self.available_seat.remove(seat)
+                self.reserved_seat.append(seat)
+                print(f"[DEBUG] Seat {seat_id} moved from available to reserved")  # Debugging
                 return
-    
-    def get_seat_from_id(self,seat_id):
-        for s in self.available_seat:
-            if s.seat_id == seat_id:
-                return s
+        print(f"[ERROR] Seat {seat_id} was not found in available seats, cannot reserve")  # Debugging  
+        
+        
+    def get_seat_from_id(self, seat_id):
+        print(f"Searching for Seat ID: {seat_id} in Showtime {self.showtime_id}")
+
+        # Check in available seats
+        for seat in self.available_seat:
+            print(f"Checking (Available) Seat ID: {seat.seat_id}")
+            if seat.seat_id == seat_id:
+                return seat
+
+        # Check in reserved seats
+        for seat in self.reserved_seat:
+            print(f"Checking (Reserved) Seat ID: {seat.seat_id}")
+            if seat.seat_id == seat_id:
+                return seat
+
+        print(f"[ERROR] Seat ID: {seat_id} NOT FOUND in Showtime {self.showtime_id}")  # Debugging
         return None
 
 class Payment:
@@ -1131,6 +1287,16 @@ def update_person(person: PersonRequest):
         return {"message": "Person and account updated successfully"}
     return {"error": "Person not found"}
 
+@app.delete("/minorcineflex/delete_person/{account_id}")
+def delete_person(account_id: str):
+    person = memory_db.search_person_account_id(account_id)
+    if person:
+        if memory_db.delete_person_by_account_id(account_id):
+            return {"message": "Person deleted successfully"}
+        else:
+            return {"error": "Person not found"}
+    return {"error": "Person not found"}
+
 #Login 
 @app.post("/minorcineflex/login")
 def login(login_request: PersonLoginRequest):
@@ -1161,10 +1327,65 @@ def add_movie(movie: MovieResponse):
     )
     return {"message": "Movie added successfully"}
 
+@app.put("/minorcineflex/update_movie/{movie_id}")
+def update_movie(movie_id: str, updated_movie: MovieResponse):
+    success = memory_db.update_movie_by_movie_id(
+        movie_id=movie_id,
+        name=updated_movie.name,
+        img=updated_movie.img,
+        movie_type=updated_movie.type,
+        detail=updated_movie.detail,
+        duration=updated_movie.duration,
+        role=updated_movie.role
+    )
+    if success:
+        return {"message": "Movie updated successfully"}
+    return {"error": "Movie not found"}
+
+@app.delete("/minorcineflex/delete_movie/{movie_id}")
+def delete_movie(movie_id: str):
+    if memory_db.delete_movie_by_movie_id(movie_id):
+        return {"message": "Movie deleted successfully"}
+    return {"error": "Movie not found"}
+
 #cinema
 @app.get("/minorcineflex/cinema")
 def cinema():
     return memory_db.get_cinema()
+
+@app.post("/minorcineflex/add_cinema")
+def add_cinema(cinema: CinemaResponse):
+    memory_db.add_cinema(
+        id=cinema.cinema_id,
+        name=cinema.name,
+        location=cinema.location,
+        region=cinema.region,
+        opentime=cinema.opentime,
+        closetime=cinema.closetime,
+        cinema_management=cinema.cinema_management
+    )
+    return {"message": "Cinema added successfully"}
+
+@app.delete("/minorcineflex/delete_cinema/{cinema_id}")
+def delete_cinema(cinema_id: int):
+    if memory_db.delete_cinema_by_cinema_id(cinema_id):
+        return {"message": "Cinema deleted successfully"}
+    return {"error": "Cinema not found"}
+
+@app.put("/minorcineflex/update_cinema/{cinema_id}")
+def update_cinema(cinema_id: int, updated_cinema: CinemaResponse):
+    success = memory_db.update_cinema_by_cinema_id(
+        cinema_id=cinema_id,
+        name=updated_cinema.name,
+        location=updated_cinema.location,
+        region=updated_cinema.region,
+        opentime=updated_cinema.opentime,
+        closetime=updated_cinema.closetime,
+        cinema_management=updated_cinema.cinema_management
+    )
+    if success:
+        return {"message": "Cinema updated successfully"}
+    return {"error": "Cinema not found"}
 
 #theater
 @app.get("/minorcineflex/cinema/{cinema_id}/theater")
@@ -1188,6 +1409,27 @@ def add_theater(cinema_id: int, theater: TheaterResponse):
 def theater_by_id(cinema_id: int, theater_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_theater_by_id(theater_id)
 
+@app.put("/minorcineflex/cinema/{cinema_id}/update_theater/{theater_id}")
+def update_theater(cinema_id: int, theater_id: str, updated_theater: TheaterResponse):
+    if memory_db.get_cinema_by_id(cinema_id).cinema_management.update_theater_by_theater_id(
+        theater_id=theater_id,
+        theater_name=updated_theater.theater_name,
+        theater_type=updated_theater.theater_type,
+        seat_amount=updated_theater.seat_amount,
+        status=updated_theater.status,
+        audio_type=updated_theater.audio_type,
+        video_type=updated_theater.video_type,
+        maintainance_list=updated_theater.maintainance_list
+    ):
+        return {"message": "Theater updated successfully"}
+    return {"error": "Theater not found"}
+
+@app.delete("/minorcineflex/cinema/{cinema_id}/delete_theater/{theater_id}")
+def delete_theater(cinema_id: int, theater_id: str):
+    if memory_db.get_cinema_by_id(cinema_id).cinema_management.delete_theater_by_theater_id(theater_id):
+        return {"message": "Theater deleted successfully"}
+    return {"error": "Theater not found"}
+
 #getseat
 @app.get("/minorcineflex/seat/{showtime_id}")
 def seat(showtime_id:str):
@@ -1201,7 +1443,7 @@ def reserved_seat(input: SeatReservationRespnd):
     user_id = input.user_id
     showtime_id  = input.showtime_id
 
-    put_seat(seat_list,user_id,showtime_id)
+    memory_db.put_seat(seat_list,user_id,showtime_id)
 
     return 
         
@@ -1226,6 +1468,129 @@ def add_showtime(cinema_id: int, showtime: ShowtimeResponse):
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
 def showtime_by_id(cinema_id: int, showtime_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime_by_id(showtime_id)
+
+# -------------------------------------------------------------------------------------- payment page --------------------------------------------------------------------------------------
+# Initiate payment - returns the amount to be paid
+@app.post("/minorcineflex/base_payment")
+def base_payment(user_id: str, movie_id: str, showtime_id: str, payment_type: str):
+    # Retrieve user account
+    account = memory_db.get_account_from_userId(user_id)
+    if not account:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Retrieve showtime
+    showtime = memory_db.get_showtime_from_showtime_id(showtime_id)
+    if not showtime:
+        raise HTTPException(status_code=404, detail="Showtime not found")
+
+    # Retrieve movie
+    movie = next((m for m in memory_db.movie_list if m.movie_id == movie_id), None)
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+
+    # Fetch reserved seats
+    reserved_seat_ids = account.reserved_list
+    if not reserved_seat_ids:
+        raise HTTPException(status_code=400, detail="No seats reserved for this user")
+    print(f"Reserved Seat IDs: {reserved_seat_ids}")
+    
+    reserved_seat_ids = account.reserved_list
+    print(f"[DEBUG] Reserved seats for user {user_id}: {reserved_seat_ids}")
+    # Calculate total price
+    total_price = 0
+    for seat_id in reserved_seat_ids:
+        seat_obj = memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id)
+        if seat_obj:
+            print(f"Seat ID: {seat_id}, Price: {seat_obj.price}")  # Debugging
+            total_price += seat_obj.price
+        else:
+            print(f"Seat ID: {seat_id} NOT FOUND")  # Debugging
+
+    return {
+        "message": "Proceed to payment",
+        "user_id": user_id,
+        "movie_id": movie_id,
+        "showtime_id": showtime_id,
+        "total_price": total_price,
+        "payment_method": payment_type,
+        "reserved_seats": reserved_seat_ids
+    }
+
+
+# Finalize payment - Creates booking if payment is successful
+@app.post("/minorcineflex/done_payment")
+def done_payment(user_id: str, movie_id: str, showtime_id: str, payment_type: str):
+    # Retrieve user account
+    account = memory_db.get_account_from_userId(user_id)
+    if not account:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Retrieve showtime
+    showtime = memory_db.get_showtime_from_showtime_id(showtime_id)
+    if not showtime:
+        raise HTTPException(status_code=404, detail="Showtime not found")
+
+    # Retrieve movie
+    movie = next((m for m in memory_db.movie_list if m.movie_id == movie_id), None)
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+
+    # Fetch reserved seats
+    reserved_seat_ids = account.reserved_list
+    if not reserved_seat_ids:
+        raise HTTPException(status_code=400, detail="No seats reserved for this user")
+
+    # Check if cinema exists
+    cinema = memory_db.get_cinema_by_id(showtime.cinema_id)
+    if not cinema:
+        raise HTTPException(status_code=404, detail="Cinema not found")
+
+    # Ensure seats are not already booked
+    if reserved_seat_ids in cinema.cinema_management.booking_list:
+        raise HTTPException(status_code=400, detail="Seats have already been booked")
+
+    # Calculate total price
+    total_price = sum(
+        memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id).price
+        for seat_id in reserved_seat_ids
+        if memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id) is not None
+    )
+
+    # Create a payment instance
+    payment = Payment(payment_type=payment_type)
+
+    # Retrieve actual Seat objects
+    seat_objects = [
+        memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id)
+        for seat_id in reserved_seat_ids
+        if memory_db.get_showtime_from_showtime_id(showtime_id).get_seat_from_id(seat_id) is not None
+    ]
+
+    # Create a booking instance
+    booking = Booking(
+        showtime=showtime,
+        account_id=user_id,
+        seat_list=seat_objects,
+        booking_date=datetime.now(),
+        payment_method=payment,
+        total=total_price
+    )
+
+    # Add booking to user history
+    account.history.append(booking)
+
+    # Add booking to cinema management's booking list
+    cinema.cinema_management.booking_list.append(booking)
+
+    return {
+        "message": "Payment completed and booking created successfully",
+        "user_id": user_id,
+        "movie_id": movie_id,
+        "showtime_id": showtime_id,
+        "total_price": total_price,
+        "payment_method": payment_type,
+        "reserved_seats": reserved_seat_ids
+    }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
