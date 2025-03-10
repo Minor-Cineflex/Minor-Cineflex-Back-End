@@ -260,8 +260,10 @@ class MinorCineflex:
                             seat_list=[
                                 SeatResponse(
                                     seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
                                     price=seat.price,
-                                    status=seat.status
+                                    seat_pos=seat.pos
                                 ) for seat in b.seat_list
                             ],
                             booking_date=b.booking_date,
@@ -329,7 +331,30 @@ class MinorCineflex:
                         dub=s.dub,
                         sub=s.sub
                         ) for s in c.cinema_management.showtime_list],
-                    booking_list=[booking for booking in c.cinema_management.booking_list],
+                    booking_list=[BookingResponse(
+                        showtime=ShowtimeResponse(
+                                showtime_id=b.showtime.showtime_id,
+                                start_date=b.showtime.start_date,
+                                cinema_id=b.showtime.cinema_id,
+                                theater_id=b.showtime.theater_id,
+                                movie_id=b.showtime.movie_id,
+                                dub=b.showtime.dub,
+                                sub=b.showtime.sub
+                            ),
+                            account_id=b.account_id,
+                            seat_list=[
+                                SeatResponse(
+                                    seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
+                                    price=seat.price,
+                                    seat_pos=seat.pos
+                                ) for seat in b.seat_list
+                            ],
+                            booking_date=b.booking_date,
+                            payment_method=PaymentResponse(payment_type=b.payment_method.payment_type),
+                            total=b.total
+                    ) for b in c.cinema_management.booking_list],
                     movie_list=[MovieResponse(
                         name = movie.name,
                         img = movie.img,
@@ -369,8 +394,10 @@ class MinorCineflex:
                             seat_list=[
                                 SeatResponse(
                                     seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
                                     price=seat.price,
-                                    status=seat.status
+                                    seat_pos=seat.pos
                                 ) for seat in b.seat_list
                             ],
                             booking_date=b.booking_date,
@@ -1093,13 +1120,11 @@ app.add_middleware(
 
 #BaseModel for API route
 class SeatResponse(BaseModel):
-    seat_id: str
-    seat_type: str
-    size: int
-    price: float
-    status: bool
-    row: str
-    col : int
+   seat_id: str
+   seat_type: str
+   size: int
+   price: float
+   seat_pos: str
 
 class MaintainanceResponse(BaseModel):
     detail: str
