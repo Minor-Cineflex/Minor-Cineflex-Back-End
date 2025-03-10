@@ -1126,6 +1126,7 @@ class Booking:
         self.__booking_date = booking_date
         self.__payment_method = payment_method
         self.__total = total
+        
 
     @property
     def showtime(self):
@@ -1238,7 +1239,7 @@ class PaymentResponse(BaseModel):
 class BookingResponse(BaseModel):
     showtime: ShowtimeResponse
     account_id: str
-    seat_list: List[SeatResponse] = []
+    seat_list: List[SeatForSeatResponse] = []
     booking_date: datetime
     payment_method: PaymentResponse
     total: float
@@ -1479,7 +1480,32 @@ def email(email: str):
                             "point": p.account.point,
                             "registered_date": p.account.registered_date,
                             "expiration_date": p.account.expiration_date,
-                            "history": p.account.history,
+                            "history":[
+                                BookingResponse(
+                                    showtime=ShowtimeResponse(
+                                        showtime_id=b.showtime.showtime_id,
+                                        start_date=b.showtime.start_date,
+                                        cinema_id=b.showtime.cinema_id,
+                                        theater_id=b.showtime.theater_id,
+                                        movie_id=b.showtime.movie_id,
+                                        dub=b.showtime.dub,
+                                        sub=b.showtime.sub
+                                    ),
+                                    account_id=b.account_id,
+                                    seat_list=[
+                                    SeatForSeatResponse(
+                                            seat_id=seat.seat_id,
+                                            seat_type=seat.seat_type,
+                                            size=seat.size,
+                                            price=seat.price,
+                                            seat_pos=seat.seat_pos
+                                        ) for seat in b.seat_list
+                                    ],
+                                    booking_date=b.booking_date,
+                                    payment_method=PaymentResponse(payment_type=b.payment_method.payment_type),
+                                    total=b.total
+                                ) for b in p.account.history
+                            ],
                             "document_list": p.account.document_list,
                             "reserved_list": p.account.reserved_list
                         }
