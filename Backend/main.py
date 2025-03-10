@@ -201,10 +201,12 @@ class MinorCineflex:
                             ),
                             account_id=b.account_id,
                             seat_list=[
-                                SeatResponse(
+                               SeatResponse(
                                     seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
                                     price=seat.price,
-                                    status=seat.status
+                                    seat_pos=seat.seat_pos
                                 ) for seat in b.seat_list
                             ],
                             booking_date=b.booking_date,
@@ -263,7 +265,7 @@ class MinorCineflex:
                                     seat_type=seat.seat_type,
                                     size=seat.size,
                                     price=seat.price,
-                                    seat_pos=seat.pos
+                                    seat_pos=seat.seat_pos
                                 ) for seat in b.seat_list
                             ],
                             booking_date=b.booking_date,
@@ -348,7 +350,7 @@ class MinorCineflex:
                                     seat_type=seat.seat_type,
                                     size=seat.size,
                                     price=seat.price,
-                                    seat_pos=seat.pos
+                                    seat_pos=seat.seat_pos
                                 ) for seat in b.seat_list
                             ],
                             booking_date=b.booking_date,
@@ -397,7 +399,7 @@ class MinorCineflex:
                                     seat_type=seat.seat_type,
                                     size=seat.size,
                                     price=seat.price,
-                                    seat_pos=seat.pos
+                                    seat_pos=seat.seat_pos
                                 ) for seat in b.seat_list
                             ],
                             booking_date=b.booking_date,
@@ -1135,11 +1137,13 @@ app.add_middleware(
 
 #BaseModel for API route
 class SeatResponse(BaseModel):
-   seat_id: str
-   seat_type: str
-   size: int
-   price: float
-   seat_pos: str
+    seat_id:str
+    seat_type:str
+    size:int
+    price:float
+    status:bool
+    row:str
+    col:int
 
 class MaintainanceResponse(BaseModel):
     detail: str
