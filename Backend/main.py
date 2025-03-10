@@ -1096,6 +1096,7 @@ class Booking:
         self.__booking_date = booking_date
         self.__payment_method = payment_method
         self.__total = total
+        
 
     @property
     def showtime(self):
