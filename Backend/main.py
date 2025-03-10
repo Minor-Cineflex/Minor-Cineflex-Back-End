@@ -748,6 +748,9 @@ class Account:
     def append_to_reserve_seat(self,seat_id: str):
         self.__reserved_list.append(seat_id)
 
+    def clear_reserved_list(self):
+        self.__reserved_list.clear()
+
     #getter
     @property
     def username(self):
@@ -1568,10 +1571,14 @@ def reserved_seat(input: SeatReservationRespnd):
     seat_list = input.outputSeat
     user_id = input.user_id
     showtime_id  = input.showtime_id
+    
+    acc = memory_db.get_account_from_userId(user_id)
+    show = memory_db.get_showtime_from_showtime_id(showtime_id)
+    for s in seat_list:
+        acc.append_to_reserve_seat(s)
+        show.move_seat_from_avai_to_res(s)
+    return "done"
 
-    memory_db.put_seat(seat_list,user_id,showtime_id)
-
-    return 
         
 #Showtime
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime")
@@ -1594,6 +1601,8 @@ def add_showtime(cinema_id: int, showtime: ShowtimeResponse):
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
 def showtime_by_id(cinema_id: int, showtime_id: str):
     return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime_by_id(showtime_id)
+
+
 
 # -------------------------------------------------------------------------------------- payment page --------------------------------------------------------------------------------------
 # Initiate payment - returns the amount to be paid
@@ -1716,6 +1725,8 @@ def done_payment(payment: PaymentRequest):
     # Add booking to cinema management's booking list
     cinema.cinema_management.booking_list.append(booking)
 
+    account.clear_reserved_list()
+
     return {
         "message": "Payment completed and booking created successfully",
         "user_id": user_id,
@@ -1725,6 +1736,13 @@ def done_payment(payment: PaymentRequest):
         "payment_method": payment_type,
         "reserved_seats": reserved_seat_ids
     }
+
+
+##debug
+@app.get("/debug/reserved_list/{user_id}")
+def debug_reserved_list(user_id: str):
+    acc = memory_db.get_account_from_userId(user_id)
+    return acc.reserved_list
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
