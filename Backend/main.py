@@ -1338,8 +1338,9 @@ memory_db.cinema_list[2].cinema_management.add_cinema_showtime(Showtime("S-103-0
 #seat_id = ST-{cinema_id}-{theater_name}-{showtime_number}-{seat_number} ex. ST-101-01-001-001 ST-101-01-001-002 
 
 #create seat instance ;-;
-for show in memory_db.cinema_list[0].cinema_management.showtime_list:
-    memory_db.create_seat(show.showtime_id)
+for i in range (3):
+    for show in memory_db.cinema_list[i].cinema_management.showtime_list:
+        memory_db.create_seat(show.showtime_id)
 
 #temp
 sh = memory_db.get_showtime_from_showtime_id("S-101-01-001")            
