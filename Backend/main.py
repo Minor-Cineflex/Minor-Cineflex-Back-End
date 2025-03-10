@@ -1135,11 +1135,13 @@ app.add_middleware(
 
 #BaseModel for API route
 class SeatResponse(BaseModel):
-   seat_id: str
-   seat_type: str
-   size: int
-   price: float
-   seat_pos: str
+    seat_id:str
+    seat_type:str
+    size:int
+    price:float
+    status:bool
+    row:str
+    col:int
 
 class MaintainanceResponse(BaseModel):
     detail: str
