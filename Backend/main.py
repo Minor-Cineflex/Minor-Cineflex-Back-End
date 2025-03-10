@@ -1239,7 +1239,7 @@ class PaymentResponse(BaseModel):
 class BookingResponse(BaseModel):
     showtime: ShowtimeResponse
     account_id: str
-    seat_list: List[SeatResponse] = []
+    seat_list: List[SeatForSeatResponse] = []
     booking_date: datetime
     payment_method: PaymentResponse
     total: float
