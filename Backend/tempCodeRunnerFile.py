@@ -1,1 +1,0 @@
-minorcineflex/create_payment
