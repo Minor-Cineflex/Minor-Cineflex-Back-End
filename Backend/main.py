@@ -1827,7 +1827,7 @@ def base_payment(payment: payment):
         "showtime_id": showtime_id,
         "total_price": total_price,
         "payment_method": payment_type,
-        "reserved_seats": reserved_seat_ids,
+        "reserved_seats": [memory_db.get_seat_data(showtime_id, i) for i in reserved_seat_ids ],
         "movie_img": movie.img
     }
 
