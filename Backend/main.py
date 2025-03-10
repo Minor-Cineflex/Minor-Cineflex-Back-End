@@ -704,6 +704,13 @@ class CinemaManagement:
                     return s
         else:
             return "Failed"
+        
+    def delete_showtime_by_id(self, showtime_id: str):
+        for s in self.showtime_list:
+            if s.showtime_id == showtime_id:
+                self.showtime_list.remove(s)
+                return True
+        return False
     
     def add_cinema_booking(self, booking: Booking):
         self.__booking_list.append(booking)
@@ -1771,6 +1778,12 @@ def showtime_by_id(cinema_id: int, showtime_id: str):
         "available_seat": showtime._Showtime__available_seat,
         "reserved_seat": showtime._Showtime__reserved_seat
     }
+
+@app.delete("/minorcineflex/cinema/{cinema_id}/delete_showtime/{showtime_id}")
+def delete_showtime(cinema_id: int, showtime_id: str):
+    if memory_db.get_cinema_by_id(cinema_id).cinema_management.delete_showtime_by_id(showtime_id):
+        return {"message": "Showtime deleted successfully"}
+    return {"error": "Showtime not found"}
 
 
 
