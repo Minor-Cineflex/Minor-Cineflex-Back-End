@@ -457,6 +457,16 @@ class MinorCineflex:
                         ]
             }
 
+    def get_seat_data(self,showtime_id,seat_id):
+        seat = self.get_seat_by_id(showtime_id,seat_id)
+        return SeatForSeatResponse(
+                                    seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
+                                    price=seat.price,
+                                    seat_pos=seat.seat_pos
+                                )
+
     def get_account_from_userId(self,user_id):
         for p in self.person_list :
             if p.account.account_id == user_id:
@@ -534,6 +544,13 @@ class MinorCineflex:
                     seat_pos = f"{chr(64 + row)}{col}"
                 ))
         return "success"
+    
+
+    def get_seat_by_id(self,showtime_id,seat_id):
+        show = self.get_showtime_from_showtime_id(showtime_id)
+        for seat in show.reserved_seat:
+            return seat
+        return None
     
 
     #getter
@@ -1699,6 +1716,11 @@ def delete_theater(cinema_id: int, theater_id: str):
 @app.get("/minorcineflex/seat/{showtime_id}")
 def seat(showtime_id:str):
     return memory_db.get_seat(showtime_id)
+
+#get seat info
+@app.get("/minorcineflex/SeatInfo/{showtime_id}/{seat_id}")
+def seat_info(showtime_id:str, seat_id:str):
+    return memory_db.get_seat_data(showtime_id,seat_id)
 
 
 
