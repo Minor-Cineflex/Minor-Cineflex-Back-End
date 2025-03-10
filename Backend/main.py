@@ -260,8 +260,10 @@ class MinorCineflex:
                             seat_list=[
                                 SeatResponse(
                                     seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
                                     price=seat.price,
-                                    status=seat.status
+                                    seat_pos=seat.pos
                                 ) for seat in b.seat_list
                             ],
                             booking_date=b.booking_date,
@@ -329,7 +331,30 @@ class MinorCineflex:
                         dub=s.dub,
                         sub=s.sub
                         ) for s in c.cinema_management.showtime_list],
-                    booking_list=[booking for booking in c.cinema_management.booking_list],
+                    booking_list=[BookingResponse(
+                        showtime=ShowtimeResponse(
+                                showtime_id=b.showtime.showtime_id,
+                                start_date=b.showtime.start_date,
+                                cinema_id=b.showtime.cinema_id,
+                                theater_id=b.showtime.theater_id,
+                                movie_id=b.showtime.movie_id,
+                                dub=b.showtime.dub,
+                                sub=b.showtime.sub
+                            ),
+                            account_id=b.account_id,
+                            seat_list=[
+                                SeatResponse(
+                                    seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
+                                    price=seat.price,
+                                    seat_pos=seat.pos
+                                ) for seat in b.seat_list
+                            ],
+                            booking_date=b.booking_date,
+                            payment_method=PaymentResponse(payment_type=b.payment_method.payment_type),
+                            total=b.total
+                    ) for b in c.cinema_management.booking_list],
                     movie_list=[MovieResponse(
                         name = movie.name,
                         img = movie.img,
@@ -369,8 +394,10 @@ class MinorCineflex:
                             seat_list=[
                                 SeatResponse(
                                     seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
                                     price=seat.price,
-                                    status=seat.status
+                                    seat_pos=seat.pos
                                 ) for seat in b.seat_list
                             ],
                             booking_date=b.booking_date,
@@ -484,6 +511,21 @@ class MinorCineflex:
         for s in seat_list:
             acc.append_to_reserve_seat(s)
             show.move_seat_from_avai_to_res(s)
+        return "success"
+    
+
+    def create_seat(self,showtime_id):
+        show = self.get_showtime_from_showtime_id(showtime_id)
+        s_id = showtime_id[1:]
+        for row in range(1,5):
+            for col in range(1,9):
+                show.append_avaliable_seat(Seat(
+                    seat_id = f"ST{s_id}-{str(8*(row-1) + col).zfill(3)}",
+                    seat_type = "Delux",
+                    size = 1,
+                    price = 100,
+                    seat_pos = f"{chr(64 + row)}{col}"
+                ))
         return "success"
     
 
@@ -1093,13 +1135,11 @@ app.add_middleware(
 
 #BaseModel for API route
 class SeatResponse(BaseModel):
-    seat_id: str
-    seat_type: str
-    size: int
-    price: float
-    status: bool
-    row: str
-    col : int
+   seat_id: str
+   seat_type: str
+   size: int
+   price: float
+   seat_pos: str
 
 class MaintainanceResponse(BaseModel):
     detail: str
@@ -1323,18 +1363,9 @@ memory_db.cinema_list[2].cinema_management.add_cinema_showtime(Showtime("S-103-0
 #seat_id = ST-{cinema_id}-{theater_name}-{showtime_number}-{seat_number} ex. ST-101-01-001-001 ST-101-01-001-002 
 
 #create seat instance ;-;
-for show in memory_db.cinema_list[0].cinema_management.showtime_list:
-    s_id = show.showtime_id
-    s_id = s_id[1:]
-    for row in range(1,5):
-        for col in range(1,9):
-            show.append_avaliable_seat(Seat(
-                seat_id = f"ST{s_id}-{str(8*(row-1) + col).zfill(3)}",
-                seat_type = "Delux",
-                size = 1,
-                price = 100,
-                seat_pos = f"{chr(64 + row)}{col}"
-            ))
+for i in range (3):
+    for show in memory_db.cinema_list[i].cinema_management.showtime_list:
+        memory_db.create_seat(show.showtime_id)
 
 #temp
 sh = memory_db.get_showtime_from_showtime_id("S-101-01-001")            
@@ -1596,6 +1627,7 @@ def add_showtime(cinema_id: int, showtime: ShowtimeResponse):
         dub=showtime.dub,
         sub=showtime.sub
     ))
+    memory_db.create_seat(showtime.showtime_id)
     return {"message": "Showtime added successfully"}
 
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
