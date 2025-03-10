@@ -201,7 +201,7 @@ class MinorCineflex:
                             ),
                             account_id=b.account_id,
                             seat_list=[
-                               SeatResponse(
+                               SeatForSeatResponse(
                                     seat_id=seat.seat_id,
                                     seat_type=seat.seat_type,
                                     size=seat.size,
@@ -260,7 +260,7 @@ class MinorCineflex:
                             ),
                             account_id=b.account_id,
                             seat_list=[
-                                SeatResponse(
+                                SeatForSeatResponse(
                                     seat_id=seat.seat_id,
                                     seat_type=seat.seat_type,
                                     size=seat.size,
@@ -345,7 +345,7 @@ class MinorCineflex:
                             ),
                             account_id=b.account_id,
                             seat_list=[
-                                SeatResponse(
+                                SeatForSeatResponse(
                                     seat_id=seat.seat_id,
                                     seat_type=seat.seat_type,
                                     size=seat.size,
@@ -394,7 +394,7 @@ class MinorCineflex:
                             ),
                             account_id=b.account_id,
                             seat_list=[
-                                SeatResponse(
+                                SeatForSeatResponse(
                                     seat_id=seat.seat_id,
                                     seat_type=seat.seat_type,
                                     size=seat.size,
@@ -462,6 +462,11 @@ class MinorCineflex:
             if p.account.account_id == user_id:
                 return p.account
         return None
+
+    def get_movie_id(self, movie_id: str):
+        for m in self.movie_list :
+            if m.movie_id == movie_id:
+                return m
 
     def delete_person_by_account_id(self, account_id: str):
         for p in self.person_list:
@@ -733,7 +738,32 @@ class Person:
                     "point": self.account.point,
                     "registered_date": self.account.registered_date,
                     "expiration_date": self.account.expiration_date,
-                    "history": self.account.history,
+                    "history": [
+                        BookingResponse(
+                            showtime=ShowtimeResponse(
+                                showtime_id=b.showtime.showtime_id, 
+                                start_date=b.showtime.start_date,
+                                cinema_id=b.showtime.cinema_id,
+                                theater_id=b.showtime.theater_id,
+                                movie_id=b.showtime.movie_id,
+                                dub=b.showtime.dub,
+                                sub=b.showtime.sub
+                            ),
+                            account_id=b.account_id,
+                            seat_list=[
+                               SeatForSeatResponse(
+                                    seat_id=seat.seat_id,
+                                    seat_type=seat.seat_type,
+                                    size=seat.size,
+                                    price=seat.price,
+                                    seat_pos=seat.seat_pos
+                                ) for seat in b.seat_list
+                            ],
+                            booking_date=b.booking_date,
+                            payment_method=PaymentResponse(payment_type=b.payment_method.payment_type), 
+                            total=b.total
+                        ) for b in self.account.history
+                    ],
                     "document_list": self.account.document_list,
                     "reserved_list": self.account.reserved_list
                 }
@@ -1145,6 +1175,13 @@ class SeatResponse(BaseModel):
     row:str
     col:int
 
+class SeatForSeatResponse(BaseModel):
+    seat_id: str
+    seat_type: str
+    size: int
+    price: float
+    seat_pos: str
+
 class MaintainanceResponse(BaseModel):
     detail: str
     start_date: datetime
@@ -1400,7 +1437,32 @@ def account_id(account_id: str):
                         "point": p.account.point,
                         "registered_date": p.account.registered_date,
                         "expiration_date": p.account.expiration_date,
-                        "history": p.account.history,
+                        "history":[
+                                BookingResponse(
+                                    showtime=ShowtimeResponse(
+                                        showtime_id=b.showtime.showtime_id,
+                                        start_date=b.showtime.start_date,
+                                        cinema_id=b.showtime.cinema_id,
+                                        theater_id=b.showtime.theater_id,
+                                        movie_id=b.showtime.movie_id,
+                                        dub=b.showtime.dub,
+                                        sub=b.showtime.sub
+                                    ),
+                                    account_id=b.account_id,
+                                    seat_list=[
+                                    SeatForSeatResponse(
+                                            seat_id=seat.seat_id,
+                                            seat_type=seat.seat_type,
+                                            size=seat.size,
+                                            price=seat.price,
+                                            seat_pos=seat.seat_pos
+                                        ) for seat in b.seat_list
+                                    ],
+                                    booking_date=b.booking_date,
+                                    payment_method=PaymentResponse(payment_type=b.payment_method.payment_type),
+                                    total=b.total
+                                ) for b in p.account.history
+                            ],
                         "document_list": p.account.document_list,
                         "reserved_list": p.account.reserved_list
                     }
@@ -1477,6 +1539,19 @@ def login(login_request: PersonLoginRequest):
 @app.get("/minorcineflex/movie")
 def movie():
     return memory_db.get_movie()
+
+@app.get("/minorcineflex/movie/{movie_id}")
+def movie(movie_id: str):
+    movie = memory_db.get_movie_id(movie_id)
+    return  {
+            "name": movie.name,
+            "img": movie.img,
+            "type": movie.type,
+            "movie_id": movie.movie_id,
+            "detail": movie.detail,
+            "duration": movie.duration,
+            "role": movie.role
+        }
 
 @app.post("/minorcineflex/add_movie")
 def add_movie(movie: MovieResponse):
@@ -1636,7 +1711,18 @@ def add_showtime(cinema_id: int, showtime: ShowtimeResponse):
 
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
 def showtime_by_id(cinema_id: int, showtime_id: str):
-    return memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime_by_id(showtime_id)
+    showtime = memory_db.get_cinema_by_id(cinema_id).cinema_management.get_showtime_by_id(showtime_id)
+    return {
+        "showtime_id": showtime._Showtime__showtime_id,
+        "start_date": showtime._Showtime__start_date,
+        "cinema_id": showtime._Showtime__cinema_id,
+        "theater_id": showtime._Showtime__theater_id,
+        "movie_id": showtime._Showtime__movie_id,
+        "dub": showtime._Showtime__dub,
+        "sub": showtime._Showtime__sub,
+        "available_seat": showtime._Showtime__available_seat,
+        "reserved_seat": showtime._Showtime__reserved_seat
+    }
 
 
 
