@@ -10,13 +10,26 @@ class MinorCineflex{
         +add_person()
         +add_all_movie()
         +search_person_account_id()
+        +search_person_email()
         +get_person()
         +get_cinema()
+        +get_cinema_by_id()
         +get_movie()
         +get_system()
         +get_cinema_by_id()
         +get_showtime_from_showtime_id()
         +get_seat()
+        +get_seat_data()
+        +get_account_from_userId()
+        +get_movie_id()
+        +delete_person_by_account_id()
+        +delete_movie_by_movie_id()
+        +delete_cinema_by_cinema_id()
+        +update_cinema_by_cinema_id()
+        +update_movie_by_movie_id()
+        +put_seat()
+        +create_seat()
+        +get_seat_by_id()
     }
 
 Cinema --> CinemaManagement
@@ -43,9 +56,12 @@ class CinemaManagement{
         +add_cinema_showtime()
         +add_cinema_booking()
         +add_cinema_movie()
+        +get_showtime()
         +get_showtime_by_id()
         +get_account_from_userId()
         +get_theater_by_id()
+        +delete_theater_by_theater_id()
+        +update_theater_by_theater_id()
         +get_theater()
     }
 
@@ -60,12 +76,7 @@ class Person {
         -gender: str
         -account: Account
         +update_person()
-    }
-class User {
-
-    }
-class Admin {
-
+        +check_account_password()
     }
 
 Account o-- Booking
@@ -81,6 +92,8 @@ class Account {
         -document_list: List[Document]
         -reserved_seat: List[Seat]
         +update_account()
+        +append_to_reserve_seat()
+        +clear_reserved_list()
     }   
 
 class Movie {
@@ -119,19 +132,19 @@ class Showtime {
         -sub: bool
         -available_seat: List[Seat]
         -reserved_seat: List[Seat]
+        +append_avaliable_seat()
+        +append_reserved_seat()
+        +move_seat_from_avai_to_res()
+        +get_seat_from_id()
     }
 
 class Payment {
         -payment_type: str
     }
 
-class SeatMap {
-        -map_type: str
-        -map: list_2d
-    }
-
 class Seat {
         -seat_id: str
+        -seat_pos: str
         -seat_type: str
         -size: int
         -price: float
