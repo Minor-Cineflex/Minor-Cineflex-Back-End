@@ -549,7 +549,8 @@ class MinorCineflex:
     def get_seat_by_id(self,showtime_id,seat_id):
         show = self.get_showtime_from_showtime_id(showtime_id)
         for seat in show.reserved_seat:
-            return seat
+            if seat.seat_id == seat_id:
+                return seat
         return None
     
 
