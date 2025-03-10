@@ -514,6 +514,21 @@ class MinorCineflex:
         return "success"
     
 
+    def create_seat(self,showtime_id):
+        show = self.get_showtime_from_showtime_id(showtime_id)
+        s_id = showtime_id[1:]
+        for row in range(1,5):
+            for col in range(1,9):
+                show.append_avaliable_seat(Seat(
+                    seat_id = f"ST{s_id}-{str(8*(row-1) + col).zfill(3)}",
+                    seat_type = "Delux",
+                    size = 1,
+                    price = 100,
+                    seat_pos = f"{chr(64 + row)}{col}"
+                ))
+        return "success"
+    
+
     #getter
     @property
     def cinema_list(self):
@@ -1348,18 +1363,9 @@ memory_db.cinema_list[2].cinema_management.add_cinema_showtime(Showtime("S-103-0
 #seat_id = ST-{cinema_id}-{theater_name}-{showtime_number}-{seat_number} ex. ST-101-01-001-001 ST-101-01-001-002 
 
 #create seat instance ;-;
-for show in memory_db.cinema_list[0].cinema_management.showtime_list:
-    s_id = show.showtime_id
-    s_id = s_id[1:]
-    for row in range(1,5):
-        for col in range(1,9):
-            show.append_avaliable_seat(Seat(
-                seat_id = f"ST{s_id}-{str(8*(row-1) + col).zfill(3)}",
-                seat_type = "Delux",
-                size = 1,
-                price = 100,
-                seat_pos = f"{chr(64 + row)}{col}"
-            ))
+for i in range (3):
+    for show in memory_db.cinema_list[i].cinema_management.showtime_list:
+        memory_db.create_seat(show.showtime_id)
 
 #temp
 sh = memory_db.get_showtime_from_showtime_id("S-101-01-001")            
@@ -1621,6 +1627,7 @@ def add_showtime(cinema_id: int, showtime: ShowtimeResponse):
         dub=showtime.dub,
         sub=showtime.sub
     ))
+    memory_db.create_seat(showtime.showtime_id)
     return {"message": "Showtime added successfully"}
 
 @app.get("/minorcineflex/cinema/{cinema_id}/showtime/{showtime_id}")
