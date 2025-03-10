@@ -1723,8 +1723,6 @@ def seat(showtime_id:str):
 def seat_info(showtime_id:str, seat_id:str):
     return memory_db.get_seat_data(showtime_id,seat_id)
 
-
-
 @app.put("/minorcineflex/reserve_seat")
 def reserved_seat(input: SeatReservationRespnd):
     seat_list = input.outputSeat
