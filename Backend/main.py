@@ -1471,8 +1471,18 @@ def showtime_by_id(cinema_id: int, showtime_id: str):
 
 # -------------------------------------------------------------------------------------- payment page --------------------------------------------------------------------------------------
 # Initiate payment - returns the amount to be paid
+class payment(BaseModel):
+    user_id: str
+    movie_id: str
+    showtime_id: str
+    payment_type: str
+
 @app.post("/minorcineflex/base_payment")
-def base_payment(user_id: str, movie_id: str, showtime_id: str, payment_type: str):
+def base_payment(payment: payment):
+    user_id = payment.user_id
+    movie_id = payment.movie_id
+    showtime_id = payment.showtime_id
+    payment_type = payment.payment_type
     # Retrieve user account
     account = memory_db.get_account_from_userId(user_id)
     if not account:
@@ -1513,7 +1523,8 @@ def base_payment(user_id: str, movie_id: str, showtime_id: str, payment_type: st
         "showtime_id": showtime_id,
         "total_price": total_price,
         "payment_method": payment_type,
-        "reserved_seats": reserved_seat_ids
+        "reserved_seats": reserved_seat_ids,
+        "movie_img": movie.img
     }
 
 
@@ -1524,7 +1535,8 @@ def done_payment(user_id: str, movie_id: str, showtime_id: str, payment_type: st
     account = memory_db.get_account_from_userId(user_id)
     if not account:
         raise HTTPException(status_code=404, detail="User not found")
-
+    else:
+        print(f"[DEBUG] User {user_id} found")  # Debugging
     # Retrieve showtime
     showtime = memory_db.get_showtime_from_showtime_id(showtime_id)
     if not showtime:
@@ -1580,7 +1592,7 @@ def done_payment(user_id: str, movie_id: str, showtime_id: str, payment_type: st
     account.history.append(booking)
 
     # Add booking to cinema management's booking list
-    cinema.cinema_management.booking_list.append(booking)
+    cinema.cinema_management.booking_list.append(booking)   
 
     account.clear_reserved_list()
 
