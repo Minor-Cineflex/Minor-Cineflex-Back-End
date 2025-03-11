@@ -814,12 +814,6 @@ class Person:
     def account(self):
         return self.__account
 
-class User(Person):
-    pass
-
-class Admin(Person):
-    pass
-
 class Account:
     def __init__(self, username: str, password: str, account_id: str, point: int, registered_date: datetime, expiration_date: datetime):
         self.__username = username
